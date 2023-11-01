@@ -1,12 +1,20 @@
 import { Routes, Route } from "react-router-dom";
+
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+
+import UserLayout from "./layout/UserLayout";
+
 function App() {
   return (
     <>
       <Routes>
-        <Route index element={<div>Home</div>} />
-        <Route path="home" element={<div>Home</div>} />
-        <Route path="login" element={<div>login</div>} />
-        <Route path="signup" element={<div>registro</div>} />
+        <Route element={<UserLayout />}>
+          <Route index element={<div>Home</div>} />
+          <Route path="home" element={<div>Home</div>} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+        </Route>
       </Routes>
     </>
   );
