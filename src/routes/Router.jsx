@@ -2,10 +2,6 @@ import React from "react";
 import CIcon from "@coreui/icons-react";
 import {
   cilHome,
-  cilFolderOpen,
-  cilPeople,
-  cilSettings,
-  cilPlus,
   cilClipboard,
   cilAccountLogout,
   cilUser,
@@ -23,7 +19,7 @@ const _adminNav = [
     component: CNavItem,
     name: "Home",
     to: "/admin/home",
-    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

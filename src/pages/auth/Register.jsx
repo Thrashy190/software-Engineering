@@ -7,55 +7,38 @@ import {
   FormGroup,
   Checkbox,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   return (
     <div className=" flex justify-center items-center">
-      <div className="w-2/3 flex  flex-col gap-14">
+      <div className="w-2/3 flex  flex-col gap-4">
         <div className="flex justify-center">
           <Typography color="primary" variant="h4">
-            Inicia sesion
+            Registrate
           </Typography>
         </div>
         <div className="flex flex-row gap-4">
           <TextField
-            sx={{ input: { color: "#FAD264" } }}
-            focused
             fullWidth
             color="primary"
-            id="outlined-basic"
             label="Nombres"
             variant="outlined"
           />
           <TextField
-            sx={{ input: { color: "#FAD264" } }}
-            focused
             fullWidth
             color="primary"
-            id="outlined-basic"
             label="Apellidos"
             variant="outlined"
           />
         </div>
 
-        <TextField
-          sx={{ input: { color: "#FAD264" } }}
-          focused
-          fullWidth
-          color="primary"
-          id="outlined-basic"
-          label="Contraseña"
-          variant="outlined"
-        />
-        <TextField
-          sx={{ input: { color: "#FAD264" } }}
-          focused
-          fullWidth
-          color="primary"
-          id="outlined-basic"
-          label="Contraseña"
-          variant="outlined"
-        />
+        <TextField fullWidth color="primary" label="Email" variant="outlined" />
+
+        <TextField color="primary" label="Contraseña" variant="outlined" />
+        <TextField color="primary" label="Contraseña" variant="outlined" />
         <div className="flex justify-start">
           <FormGroup>
             <FormControlLabel
@@ -75,9 +58,11 @@ const Register = () => {
         </Button>
         <div className="flex justify-end flex-row gap-2">
           <Typography color="primary">¿Ya tienes una cuenta?</Typography>
-          <Typography color="#f5f5f5" display="inline">
-            Inicia sesión aqui
-          </Typography>
+          <div onClick={() => navigate("/login")}>
+            <Typography color="#f5f5f5" display="inline">
+              Inicia sesión aqui
+            </Typography>
+          </div>
         </div>
       </div>
     </div>

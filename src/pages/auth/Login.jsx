@@ -11,18 +11,12 @@ const Login = () => {
           </Typography>
         </div>
         <TextField
-          sx={{ input: { color: "#FAD264" } }}
-          focused
-          fullWidth
           color="primary"
           id="outlined-basic"
           label="E-mail"
           variant="outlined"
         />
         <TextField
-          sx={{ input: { color: "#FAD264" } }}
-          focused
-          fullWidth
           color="primary"
           id="outlined-basic"
           label="Contraseña"
