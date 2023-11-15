@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./scss/style.scss";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import Review from "./pages/users/Review";
 
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
@@ -16,6 +17,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="course" element={<div>Home</div>} />
+          <Route path="ph-review" element={<Review>Reseña</Review>} />
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<div>Home</div>} />
