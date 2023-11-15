@@ -7,13 +7,9 @@ import Typography from "@mui/material/Typography";
 import RatingStars from "../shared/RatingStarts";
 import { formatCurrencyToMXN } from "../../utils/formatter";
 import { downloadImage } from "../../firebase/storage";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const CourseCard = ({
-  courseData,
-  backgroundColor,
-  fontColor,
-  courseProgress,
-}) => {
+const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
   const {
     courseName,
     courseCreator,
@@ -21,9 +17,11 @@ const CourseCard = ({
     courseReviews,
     courseRating,
     courseThumbNail,
+    courseProgress,
   } = courseData;
 
   const [imageUrl, setImageUrl] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,7 +44,9 @@ const CourseCard = ({
             maxWidth: 345,
             backgroundColor: backgroundColor,
             color: fontColor,
+            cursor: "pointer",
           }}
+          onClick={() => navigate("/course")}
         >
           <CardMedia
             component="img"
@@ -68,7 +68,9 @@ const CourseCard = ({
               </Typography>
             )}
             {courseProgress && (
-              <Typography variant="body">Progreso {courseProgress}%</Typography>
+              <Typography variant="body">
+                Progreso: {courseProgress}%
+              </Typography>
             )}
           </CardContent>
         </Card>

@@ -1,7 +1,10 @@
 import React from "react";
 import { Typography, TextField, Button } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   return (
     <div className=" flex justify-center items-center">
       <div className="w-2/3 flex  flex-col gap-14">
@@ -22,7 +25,7 @@ const Login = () => {
           label="Contraseña"
           variant="outlined"
         />
-        <div className="flex justify-start">
+        {/* <div className="flex justify-start">
           <Typography
             color="#f5f5f5"
             variant="text"
@@ -31,16 +34,17 @@ const Login = () => {
           >
             He olvidado mi contraseña
           </Typography>
-        </div>
+        </div> */}
         <Button fullWidth variant="contained">
-          Crea tu cuenta aqui
+          Inicia sesion aqui
         </Button>
         <div className="flex justify-end flex-row gap-2">
           <Typography color="primary">¿No tienes una cuenta?</Typography>
           <Typography
             color="#f5f5f5"
-            sx={{ textDecoration: "underline" }}
+            sx={{ textDecoration: "underline", cursor: "pointer" }}
             display="inline"
+            onClick={() => navigate("/register")}
           >
             Crea tu historia aqui
           </Typography>

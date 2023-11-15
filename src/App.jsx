@@ -3,6 +3,8 @@ import "./scss/style.scss";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Course from "./pages/courses/Course";
+import CourseList from "./pages/courses/CourseList";
+import MyCourses from "./pages/users/MyCourses";
 
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
@@ -17,6 +19,8 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="course" element={<Course />} />
+          <Route path="courses" element={<CourseList />} />
+          <Route path="mycourses" element={<MyCourses />} />
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<div>Home</div>} />

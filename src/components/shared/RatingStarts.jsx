@@ -1,7 +1,7 @@
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-const RatingStars = ({ rating, totalReviews }) => {
+const RatingStars = ({ rating, totalReviews, fontColor }) => {
   const MAX_STARS = 5;
   const filledStars = Math.round(rating / 2);
 
@@ -14,7 +14,7 @@ const RatingStars = ({ rating, totalReviews }) => {
   };
 
   return (
-    <div className="flex flex-row gap-2" style={{ color: "#FAD264" }}>
+    <div className="flex flex-row gap-2" style={{ color: fontColor }}>
       <div>{renderStars()}</div>
       <div>
         <span className="font-bold">{rating}</span>

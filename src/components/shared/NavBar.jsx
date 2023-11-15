@@ -25,6 +25,7 @@ const NavBar = () => {
         <div
           className="text-6xl font-turret text-[#FAD264] "
           onClick={() => navigate("")}
+          sx={{ cursor: "pointer" }}
         >
           Loading
         </div>
@@ -34,10 +35,11 @@ const NavBar = () => {
 
   if (currentUser)
     return (
-      <div className="top-0 left-0 right-0 flex justify-between">
+      <div className="top-0 left-0 right-0 flex justify-between px-10">
         <div
           className="text-6xl font-turret text-[#FAD264] "
           onClick={() => navigate("")}
+          sx={{ cursor: "pointer" }}
         >
           Loading
         </div>
@@ -85,7 +87,9 @@ const NavBar = () => {
       </div>
       <div className="flex f-row gap-4">
         <div>
-          <Button variant="text">Cursos</Button>
+          <Button variant="text" onClick={() => navigate("courses")}>
+            Cursos
+          </Button>
         </div>
         <div>
           <Button variant="outlined" onClick={() => navigate("login")}>

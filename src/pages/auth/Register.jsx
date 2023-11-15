@@ -59,7 +59,10 @@ const Register = () => {
         <div className="flex justify-end flex-row gap-2">
           <Typography color="primary">¿Ya tienes una cuenta?</Typography>
           <div onClick={() => navigate("/login")}>
-            <Typography color="#f5f5f5" display="inline">
+            <Typography
+              color="#f5f5f5"
+              sx={{ textDecoration: "underline", cursor: "pointer" }}
+            >
               Inicia sesión aqui
             </Typography>
           </div>
