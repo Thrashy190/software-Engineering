@@ -1,38 +1,100 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import { Skeleton } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import RatingStars from "../shared/RatingStarts";
 import { formatCurrencyToMXN } from "../../utils/formatter";
+import { downloadImage } from "../../firebase/storage";
 
-const CourseCard = (courseData) => {
+const CourseCard = ({
+  courseData,
+  backgroundColor,
+  fontColor,
+  courseProgress,
+}) => {
   const {
     courseName,
     courseCreator,
     coursePrice,
     courseReviews,
     courseRating,
+    courseThumbNail,
   } = courseData;
 
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = await downloadImage(courseThumbNail);
+        setImageUrl(url);
+      } catch (error) {
+        console.error("Error al obtener la imagen:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <Card sx={{ maxWidth: 345, color: "#764288" }}>
-      {/* <CardMedia component="img" alt="green iguana" height="140" /> */}
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {courseName}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {courseCreator}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          <RatingStars rating={courseRating} totalReviews={courseReviews} />
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {formatCurrencyToMXN(coursePrice)}
-        </Typography>
-      </CardContent>
-    </Card>
+    <>
+      {imageUrl ? (
+        <Card
+          sx={{
+            maxWidth: 345,
+            backgroundColor: backgroundColor,
+            color: fontColor,
+          }}
+        >
+          <CardMedia
+            component="img"
+            sx={{ height: 200 }}
+            alt="Miniatura"
+            src={imageUrl}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h6">
+              {courseName}
+            </Typography>
+            <Typography variant="body">by {courseCreator}</Typography>
+            <Typography variant="body">
+              <RatingStars rating={courseRating} totalReviews={courseReviews} />
+            </Typography>
+            {coursePrice && (
+              <Typography variant="body">
+                {formatCurrencyToMXN(coursePrice)} MXN
+              </Typography>
+            )}
+            {courseProgress && (
+              <Typography variant="body">Progreso {courseProgress}%</Typography>
+            )}
+          </CardContent>
+        </Card>
+      ) : (
+        <Card
+          sx={{ maxWidth: 345, backgroundColor: "#764288", color: "#ffffff" }}
+        >
+          <Skeleton
+            sx={{ height: 200 }}
+            animation="wave"
+            variant="rectangular"
+          />
+          <CardContent>
+            <Skeleton
+              animation="wave"
+              height={50}
+              style={{ marginBottom: 6 }}
+              width="80%"
+            />
+            <Skeleton animation="wave" height={25} width="50%" />
+            <Skeleton animation="wave" height={25} width="60%" />
+            <Skeleton animation="wave" height={25} width="50%" />
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 };
 

@@ -14,13 +14,13 @@ const RatingStars = ({ rating, totalReviews }) => {
   };
 
   return (
-    <div>
-      <div>
-        <span>Calificación: {rating}</span>
-      </div>
+    <div className="flex flex-row gap-2" style={{ color: "#FAD264" }}>
       <div>{renderStars()}</div>
       <div>
-        <span>Total de reseñas: {totalReviews}</span>
+        <span className="font-bold">{rating}</span>
+      </div>
+      <div>
+        <span className="font-light">({totalReviews})</span>
       </div>
     </div>
   );
