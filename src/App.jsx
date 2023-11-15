@@ -6,6 +6,7 @@ import Course from "./pages/courses/Course";
 import CourseList from "./pages/courses/CourseList";
 import MyCourses from "./pages/users/MyCourses";
 import Landing from "./pages/landing/Landing";
+import Profile from "./pages/users/Profile";
 
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
@@ -22,6 +23,7 @@ function App() {
           <Route path="course" element={<Course />} />
           <Route path="courses" element={<CourseList />} />
           <Route path="mycourses" element={<MyCourses />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<div>Home</div>} />
