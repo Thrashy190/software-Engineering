@@ -1,19 +1,10 @@
 import React from "react";
 import { CContainer, CRow, CCol } from "@coreui/react";
 import CourseCard from "../../components/course/CourseCard";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { TextField } from "@mui/material";
+import SearchBar from "../../components/shared/SearchBar";
+import { TextField, MenuItem } from "@mui/material";
 
 const MyCourses = () => {
-  const courseData = {
-    courseName: "Curso de React",
-    courseCreator: "Juanito Pérez",
-    coursePrice: 100,
-    courseReviews: 10,
-    courseRating: 4,
-    courseThumbNail: "miniaturas/f1.jpeg",
-  };
-
   const dummmyData = [
     {
       courseName: "Curso de React",
@@ -23,7 +14,6 @@ const MyCourses = () => {
       courseProgress: 50,
       courseThumbNail: "miniaturas/f1.jpeg",
     },
-
     {
       courseName: "Curso de React",
       courseCreator: "Juanito Pérez",
@@ -52,27 +42,7 @@ const MyCourses = () => {
             </div>
           </CCol>
         </CRow>
-        <CRow>
-          <CCol className="pb-6" xs={6}>
-            <div>
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Buscar Cualquier cosa...."
-              />
-            </div>
-          </CCol>
-          <CCol className="pb-6" xs={3}>
-            <div>
-              <TextField variant="outlined" fullWidth />
-            </div>
-          </CCol>
-          <CCol className="pb-6" xs={3}>
-            <div>
-              <TextField variant="outlined" fullWidth />
-            </div>
-          </CCol>
-        </CRow>
+        <SearchBar />
         <CRow>
           {dummmyData.map((courseData) => (
             <CCol className="pb-6" xs={3}>

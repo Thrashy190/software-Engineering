@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
@@ -6,8 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useAuth } from "../../context/AuthContext";
 
 const NavBar = () => {
-  const { currentUser } = useAuth();
-  let location = useLocation();
+  const { currentUser, logOut } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,13 +19,21 @@ const NavBar = () => {
     setAnchorEl(null);
   };
 
-  if (location.pathname === "/login" || location.pathname === "/register") {
+  useEffect(() => {
+    console.log(currentUser);
+  }, []);
+
+  if (
+    location.pathname === "/login" ||
+    location.pathname === "/register" ||
+    location.pathname === "/recover-password"
+  ) {
     return (
       <div className="top-0 left-0 right-0 flex justify-between">
         <div
           className="text-6xl font-turret text-[#FAD264] "
           onClick={() => navigate("")}
-          sx={{ cursor: "pointer" }}
+          style={{ cursor: "pointer" }}
         >
           Loading
         </div>
@@ -39,16 +47,20 @@ const NavBar = () => {
         <div
           className="text-6xl font-turret text-[#FAD264] "
           onClick={() => navigate("")}
-          sx={{ cursor: "pointer" }}
+          style={{ cursor: "pointer" }}
         >
           Loading
         </div>
         <div className="flex f-row gap-4">
           <div>
-            <Button variant="text">Cursos</Button>
+            <Button variant="text" onClick={() => navigate("courses")}>
+              Cursos
+            </Button>
           </div>
           <div>
-            <Button variant="text">Cursos</Button>
+            <Button variant="text" onClick={() => navigate("mycourses")}>
+              Mis cursos
+            </Button>
           </div>
           <div>
             <Button
@@ -58,7 +70,7 @@ const NavBar = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             >
-              Diego Antonio Lopez Martinez
+              {currentUser.email}
             </Button>
             <Menu
               id="basic-menu"
@@ -69,8 +81,22 @@ const NavBar = () => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleClose}>Perfil</MenuItem>
-              <MenuItem onClick={handleClose}>Cerrar Sesion</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  navigate("profile");
+                }}
+              >
+                Perfil
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  logOut();
+                }}
+              >
+                Cerrar Sesion
+              </MenuItem>
             </Menu>
           </div>
         </div>
@@ -82,6 +108,7 @@ const NavBar = () => {
       <div
         className="text-6xl font-turret text-[#FAD264] "
         onClick={() => navigate("")}
+        style={{ cursor: "pointer" }}
       >
         Loading
       </div>

@@ -2,18 +2,9 @@ import React from "react";
 import { CContainer, CRow, CCol } from "@coreui/react";
 import CourseCard from "../../components/course/CourseCard";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import { TextField } from "@mui/material";
+import SearchBar from "../../components/shared/SearchBar";
 
 const CourseList = () => {
-  const courseData = {
-    courseName: "Curso de React",
-    courseCreator: "Juanito Pérez",
-    coursePrice: 100,
-    courseReviews: 10,
-    courseRating: 4,
-    courseThumbNail: "miniaturas/f1.jpeg",
-  };
-
   const dummmyData = [
     {
       courseName: "Curso de React",
@@ -155,27 +146,7 @@ const CourseList = () => {
             </div>
           </CCol>
         </CRow>
-        <CRow>
-          <CCol className="pb-6" xs={6}>
-            <div>
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="Buscar Cualquier cosa...."
-              />
-            </div>
-          </CCol>
-          <CCol className="pb-6" xs={3}>
-            <div>
-              <TextField variant="outlined" fullWidth />
-            </div>
-          </CCol>
-          <CCol className="pb-6" xs={3}>
-            <div>
-              <TextField variant="outlined" fullWidth />
-            </div>
-          </CCol>
-        </CRow>
+        <SearchBar />
         <CRow>
           {dummmyData.map((courseData) => (
             <CCol className="pb-6" xs={3}>
@@ -194,7 +165,7 @@ const CourseList = () => {
             </div>
             <div className="font-bold text-[#FAD264] border-2 border-[#FAD264] rounded-full">
               <a href="#top">
-                <ArrowUpwardIcon fontSize="large" />
+                <ArrowUpwardIcon fontSize="large" color="FAD264" />
               </a>
             </div>
             <div className="text-lg font-bold text-[#FAD264]">
