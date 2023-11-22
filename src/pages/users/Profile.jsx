@@ -1,9 +1,31 @@
+import { useState } from 'react';
+
 import { Typography, TextField, Button } from '@mui/material';
 import { CContainer, CRow, CCol } from "@coreui/react";
 
 import UserNav from '../../components/users/UserNav';
+import { useEffect } from 'react';
+
+import { useAuth } from '../../context/AuthContext';
+
+import { getDocument } from '../../firebase/firestore';
 
 const Profile = () => {
+
+  const { currentUser } = useAuth();
+
+  const [ user, setUser] = useState({});
+
+  useEffect(() => {
+
+    const getUser = async () => {
+      const myUser = await getDocument('users', currentUser.uid);
+      setUser(myUser);
+    }
+
+    getUser();
+  }, [])
+
   return (
     <>
       <CContainer>
@@ -13,7 +35,7 @@ const Profile = () => {
           </CCol>
           <CCol className='flex items-center flex-col gap-3'>
             <Typography color="primary" variant="h4">
-              Perfil
+              Perfil de { user.name }
             </Typography>
 
             <TextField
