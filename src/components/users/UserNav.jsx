@@ -1,17 +1,17 @@
 import { Typography, Button } from '@mui/material';
 
-const UserNav = () => {
+const UserNav = ({ userName }) => {
   return (
     <div className="flex items-center flex-col gap-3">
-      <img
+      {/* <img
         src="https://avatars.githubusercontent.com/u/69998059?v=4https://avatars.githubusercontent.com/u/69998059?v=4"
         alt=""
         srcset=""
         className="rounded-full w-40 h-40"
-      />
+      /> */}
 
       <Typography color="primary" variant="h5">
-        César Zárate
+        {userName}
       </Typography>
 
       <Button fullWidth variant="contained">

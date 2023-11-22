@@ -59,9 +59,9 @@ const Profile = () => {
     <>
       <CContainer className='pt-5'>
         <CRow>
-          <CCol xs={3}>
-            <UserNav />
-          </CCol>
+          {/* <CCol xs={3}>
+            <UserNav userName={`${user.name} ${user.lastname}`} />
+          </CCol> */}
           <CCol className='flex items-center flex-col gap-3'>
             <Typography color="primary" variant="h4">
               Perfil
