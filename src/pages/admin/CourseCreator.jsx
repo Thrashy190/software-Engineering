@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CCol, CContainer, CRow } from "@coreui/react";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { addDocument } from "../../firebase/firestore";
 import { uploadFile } from "../../firebase/storage";
+import Modulo from "../../components/admin/Module";
 
 const marks = [
   {
@@ -36,6 +37,17 @@ const CourseCreator = () => {
     description: "",
     target: "",
   });
+  const [modulos, setModulos] = useState([]);
+
+  const agregarModulo = () => {
+    setModulos([...modulos, {}]); // Puedes inicializar el módulo con la información predeterminada aquí
+  };
+
+  const eliminarModulo = (index) => {
+    const nuevosModulos = [...modulos];
+    nuevosModulos.splice(index, 1);
+    setModulos(nuevosModulos);
+  };
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -198,6 +210,21 @@ const CourseCreator = () => {
             />
           </CCol>
         </CRow>
+        <CRow className="pt-10">
+          <CCol>
+            <div className="text-2xl font-bold text-[#67237E]">
+              Modulos / Lecciones / Examenes
+            </div>
+          </CCol>
+        </CRow>
+        <div>
+          {modulos.map((modulo, index) => (
+            <Modulo key={index} index={index} eliminarModulo={eliminarModulo} />
+          ))}
+          <Button variant="contained" onClick={agregarModulo}>
+            Agregar Módulo
+          </Button>
+        </div>
         <CRow className="py-10">
           <CCol className="flex justify-end">
             <div className="flex gap-4">

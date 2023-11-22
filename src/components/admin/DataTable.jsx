@@ -24,7 +24,7 @@ export default function DataTable({ columns, collection }) {
   return (
     <div style={{ height: 650, width: "100%" }}>
       {isLoading ? (
-        <LinearProgress></LinearProgress>
+        <LinearProgress />
       ) : (
         <DataGrid
           rows={rows}
