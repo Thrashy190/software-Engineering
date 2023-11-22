@@ -8,7 +8,8 @@ import Course from "./pages/courses/Course";
 import CourseList from "./pages/courses/CourseList";
 import MyCourses from "./pages/users/MyCourses";
 import Landing from "./pages/landing/Landing";
-import Profile from "./pages/users/Profile";
+import ProfileUser from "./pages/users/Profile";
+import ProfileAdmin from "./pages/admin/Profile";
 import RecoverPassword from "./pages/auth/RecoverPassword";
 
 import AdminLayout from "./layout/AdminLayout";
@@ -34,7 +35,7 @@ function App() {
           <Route path="course" element={<Course />} />
           <Route path="courses" element={<CourseList />} />
           <Route path="mycourses" element={<MyCourses />} />
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<ProfileUser />} />
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<Home />} />
@@ -44,7 +45,7 @@ function App() {
           <Route path="courses" element={<Courses />} />
           <Route path="create-courses" element={<CourseCreator />} />
           <Route path="editar-courses" element={<div>Editar Courses</div>} />
-          <Route path="profile" element={<div>Profile</div>} />
+          <Route path="profile" element={<ProfileAdmin />} />
         </Route>
       </Routes>
     </>
