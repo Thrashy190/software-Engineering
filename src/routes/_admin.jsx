@@ -38,11 +38,6 @@ const _admin = [
         name: "Crear curso",
         to: "/admin/create-courses",
       },
-      {
-        component: CNavItem,
-        name: "Editar cursos",
-        to: "/admin/editar-courses",
-      },
     ],
   },
   {

@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 
-import { useNavigate } from "react-router";
-
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 import ArticleIcon from "@mui/icons-material/Article";
 import QuizIcon from "@mui/icons-material/Quiz";
 
-const ModuleList = ({ modules }) => {
-  const navigate = useNavigate();
-
+const ModuleProgressList = ({ modules }) => {
   const [expandedModule, setExpandedModule] = useState(null);
 
   const toggleModule = (index) => {
@@ -23,8 +19,8 @@ const ModuleList = ({ modules }) => {
           key={index}
           className={` rounded p-4 cursor-pointer relative ${
             expandedModule === index
-              ? "bg-transparent border-[#FAD264] border-2"
-              : "bg-[#FAD264]"
+              ? "bg-transparent border-[#764288] border-2"
+              : "bg-[#764288]"
           }`}
         >
           <div
@@ -34,7 +30,7 @@ const ModuleList = ({ modules }) => {
           >
             <div
               className={`text-xl font-bold ${
-                expandedModule === index ? "text-[#FAD264] " : "text-black "
+                expandedModule === index ? "text-[#764288] " : "text-black "
               }`}
             >
               {module.title}
@@ -42,7 +38,7 @@ const ModuleList = ({ modules }) => {
             <div className="flex flex-row gap-4">
               <div
                 className={`pt-1 text-xl font-bold ${
-                  expandedModule === index ? "text-[#FAD264] " : "text-black "
+                  expandedModule === index ? "text-[#764288] " : "text-black "
                 }`}
               >
                 {module.duration}
@@ -52,7 +48,7 @@ const ModuleList = ({ modules }) => {
                   expandedModule === index ? "rotate-180" : ""
                 }`}
                 style={{
-                  color: expandedModule === index ? "#FAD264" : "#000000",
+                  color: expandedModule === index ? "#67237E" : "#000000",
                 }}
                 onClick={() => toggleModule(index)}
               >
@@ -63,12 +59,9 @@ const ModuleList = ({ modules }) => {
           {expandedModule === index && (
             <div className="flex flex-col">
               {module.lessons.map((lesson, lessonIndex) => (
-                <div key={lessonIndex} className="flex justify-between mb-2 ">
+                <div key={lessonIndex} className="flex justify-between mb-2">
                   <div className="flex flex-row gap-4">
-                    <div
-                      className="text-white text-xl font-bold "
-                      onClick={() => navigate("/lection")}
-                    >
+                    <div className="text-white text-xl font-bold ">
                       {lesson.title}
                     </div>
                     {lesson.type === "Video" ? (
@@ -92,4 +85,4 @@ const ModuleList = ({ modules }) => {
   );
 };
 
-export default ModuleList;
+export default ModuleProgressList;

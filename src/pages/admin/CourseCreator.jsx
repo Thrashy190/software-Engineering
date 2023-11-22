@@ -10,8 +10,13 @@ import {
 } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { addDocument } from "../../firebase/firestore";
-import { uploadFile } from "../../firebase/storage";
+//import { uploadFile } from "../../firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase/firebase";
 import Modulo from "../../components/admin/Module";
+import Examen from "../../components/admin/Exam";
+import Notification from "../../components/shared/Notifications";
+import { useNavigate } from "react-router-dom";
 
 const marks = [
   {
@@ -29,15 +34,26 @@ const marks = [
 ];
 
 const CourseCreator = () => {
+  const navigate = useNavigate();
+
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+
   const [data, setData] = React.useState({
-    title: "",
-    summary: "",
+    title: "123123",
+    summary: "123123",
     level: 1,
-    price: 0,
-    description: "",
-    target: "",
+    price: 1110,
+    description: "123123",
+    target: "123123",
   });
   const [modulos, setModulos] = useState([]);
+  const [examen, setExamen] = useState({ preguntas: [] });
+  const [file, setFile] = useState(null);
+  const [urlImg, setUrlImg] = useState("");
 
   const agregarModulo = () => {
     setModulos([...modulos, {}]); // Puedes inicializar el módulo con la información predeterminada aquí
@@ -49,11 +65,16 @@ const CourseCreator = () => {
     setModulos(nuevosModulos);
   };
 
+  const agregarPregunta = () => {
+    // Lógica para agregar pregunta al examen
+    setExamen({ preguntas: [...examen.preguntas, { respuestas: [] }] });
+  };
+
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const { title, summary, level, price, description, target } = data;
     const course = {
       title,
@@ -64,11 +85,75 @@ const CourseCreator = () => {
       target,
       status: "draft",
       createdAt: new Date(),
+      reviews: [],
     };
-    addDocument("courses", course);
+    await addDocument("courses", course).then((response) => {
+      setNotify({
+        isOpen: true,
+        message: "Curso guardado con exito",
+        type: "success",
+      });
+      navigate("/admin/courses");
+      // const { id } = response;
+      // modulos.forEach(async (modulo, index) => {
+      //   const { name } = modulo;
+      //   const module = {
+      //     name,
+      //     order: index,
+      //     courseId: id,
+      //   };
+      //   await addDocument("modules", module).then((response) => {
+      //     const { id } = response;
+      //     lecciones.forEach(async (leccion, index) => {
+      //       const { name, summary, videoUrl } = leccion;
+      //       const lection = {
+      //         name,
+      //         summary,
+      //         videoUrl,
+      //         order: index,
+      //         moduleId: id,
+      //       };
+      //       await addDocument("lections", lection);
+      //     });
+      //   });
+      // });
+    });
+    // uploadFiles().then(async () => {
+
+    // });
   };
 
-  const handleCreate = () => {
+  // const uploadFiles = () => {
+  //   if (file) {
+  //     // Referencia al almacenamiento en Firebase Storage
+  //     const storageRef = ref(storage, `miniaturas/${file.name}`);
+
+  //     // Tarea de subida del archivo
+  //     const tareaSubida = uploadBytesResumable(storageRef, file);
+
+  //     // Actualizar el progreso de la subida
+  //     tareaSubida.on(
+  //       "state_changed",
+  //       (error) => {
+  //         console.error(error.message);
+  //       },
+  //       () => {
+  //         // Subida completada, obtener la URL de descarga
+  //         getDownloadURL(tareaSubida.snapshot.ref).then((url) => {
+  //           setUrlImg(url);
+  //         });
+  //       }
+  //     );
+  //   } else {
+  //     console.error("Selecciona un archivo antes de subirlo.");
+  //   }
+  // };
+
+  const addImage = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handlePublish = () => {
     const { title, summary, level, price, description, target } = data;
     const course = {
       title,
@@ -94,7 +179,7 @@ const CourseCreator = () => {
           </CCol>
           <CCol className="flex justify-end">
             <div className="flex gap-4">
-              <Button variant="contained" onClick={handleCreate}>
+              <Button variant="contained" onClick={handlePublish}>
                 Crear curso
               </Button>
               <Button variant="contained" onClick={handleSave}>
@@ -159,6 +244,7 @@ const CourseCreator = () => {
                 <div className="text-3xl">Subir miniatura</div>
               </div>
               <input
+                onChange={addImage}
                 accept="image/*"
                 id="raised-button-file"
                 type="file"
@@ -217,23 +303,30 @@ const CourseCreator = () => {
             </div>
           </CCol>
         </CRow>
-        <div>
+        <div className="py-4">
           {modulos.map((modulo, index) => (
             <Modulo key={index} index={index} eliminarModulo={eliminarModulo} />
           ))}
-          <Button variant="contained" onClick={agregarModulo}>
+          <Button variant="contained" className="mt-4" onClick={agregarModulo}>
             Agregar Módulo
           </Button>
         </div>
+        <Examen examen={examen} agregarPregunta={agregarPregunta} />
+
         <CRow className="py-10">
           <CCol className="flex justify-end">
             <div className="flex gap-4">
-              <Button variant="contained">Crear curso</Button>
-              <Button variant="contained">Guardar curso</Button>
+              <Button variant="contained" onClick={handlePublish}>
+                Crear curso
+              </Button>
+              <Button variant="contained" onClick={handleSave}>
+                Guardar curso
+              </Button>
             </div>
           </CCol>
         </CRow>
       </CContainer>
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </>
   );
 };

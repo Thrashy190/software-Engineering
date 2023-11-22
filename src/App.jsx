@@ -11,6 +11,7 @@ import Landing from "./pages/landing/Landing";
 import ProfileUser from "./pages/users/Profile";
 import ProfileAdmin from "./pages/admin/Profile";
 import RecoverPassword from "./pages/auth/RecoverPassword";
+import Lection from "./pages/courses/Lection";
 
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
@@ -33,6 +34,7 @@ function App() {
           <Route path="ph-review" element={<Review>Reseña</Review>} />
           <Route path="recover-password" element={<RecoverPassword />} />
           <Route path="course" element={<Course />} />
+          <Route path="lection" element={<Lection />} />
           <Route path="courses" element={<CourseList />} />
           <Route path="mycourses" element={<MyCourses />} />
           <Route path="profile" element={<ProfileUser />} />

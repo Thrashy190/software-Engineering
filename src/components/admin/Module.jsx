@@ -1,24 +1,22 @@
 // Modulo.js
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
-import ArticleIcon from "@mui/icons-material/Article";
-import QuizIcon from "@mui/icons-material/Quiz";
 import Leccion from "./Lection";
-import Examen from "./Exam";
+import { Button } from "@mui/material";
+import { CContainer, CRow, CCol } from "@coreui/react";
 
 const Modulo = ({ index, eliminarModulo }) => {
   const [lecciones, setLecciones] = useState([]);
-  const [examen, setExamen] = useState({ preguntas: [] });
 
   const agregarLeccion = (tipo) => {
     // Lógica para agregar lección según el tipo (video o documento)
-    setLecciones([...lecciones, { tipo }]);
+    setLecciones([...lecciones, { name: tipo }]);
   };
 
-  const agregarPregunta = () => {
-    // Lógica para agregar pregunta al examen
-    setExamen({ preguntas: [...examen.preguntas, { respuestas: [] }] });
+  const eliminarLeccion = (index) => {
+    const nuevasLecciones = [...lecciones];
+    nuevasLecciones.splice(index, 1);
+    setLecciones(nuevasLecciones);
   };
 
   const [expandedModule, setExpandedModule] = useState(null);
@@ -32,38 +30,24 @@ const Modulo = ({ index, eliminarModulo }) => {
   return (
     <div
       key={index}
-      className={` rounded p-4 my-4 cursor-pointer relative ${
-        expandedModule === index
-          ? "bg-transparent border-[#FAD264] border-2"
-          : "bg-[#FAD264]"
-      }`}
+      className={`rounded p-4 my-4 cursor-pointer relative  bg-[#FAD264]`}
     >
       <div
         className={`flex items-center justify-between ${
           expandedModule === index ? "pb-3" : ""
         }`}
       >
-        <div
-          className={`text-xl font-bold ${
-            expandedModule === index ? "text-[#FAD264] " : "text-black "
-          }`}
-        >
-          titulo
+        <div className={`text-xl font-bold "text-black }`}>
+          Modulo {index + 1}
         </div>
+
         <div className="flex flex-row gap-4">
-          <div
-            className={`pt-1 text-xl font-bold ${
-              expandedModule === index ? "text-[#FAD264] " : "text-black "
-            }`}
-          >
-            duracion
-          </div>
           <div
             className={`transition-transform transform ${
               expandedModule === index ? "rotate-180" : ""
             }`}
             style={{
-              color: expandedModule === index ? "#FAD264" : "#000000",
+              color: "#000000",
             }}
             onClick={() => toggleModule(index)}
           >
@@ -72,21 +56,45 @@ const Modulo = ({ index, eliminarModulo }) => {
         </div>
       </div>
       {expandedModule === index && (
-        <div className="flex flex-col">
-          <button onClick={() => eliminarModulo(index)}>Eliminar Módulo</button>
-          <button onClick={() => agregarLeccion("video")}>
-            Agregar Lección de Video
-          </button>
-          <button onClick={() => agregarLeccion("documento")}>
-            Agregar Lección de Documento
-          </button>
-
+        <CContainer className="flex flex-col">
           {lecciones.map((leccion, leccionIndex) => (
-            <Leccion key={leccionIndex} leccion={leccion} />
+            <Leccion
+              eliminarLeccion={eliminarLeccion}
+              key={leccionIndex}
+              leccion={leccion}
+              index={leccionIndex}
+            />
           ))}
-
-          <Examen examen={examen} agregarPregunta={agregarPregunta} />
-        </div>
+          <CRow className="py-4 flex justify-end">
+            <CCol>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => eliminarModulo(index)}
+              >
+                Eliminar Módulo
+              </Button>
+            </CCol>
+            <CCol>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => agregarLeccion("video")}
+              >
+                Agregar Lección de Video
+              </Button>
+            </CCol>
+            <CCol>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() => agregarLeccion("documento")}
+              >
+                Agregar Lección de Documento
+              </Button>
+            </CCol>
+          </CRow>
+        </CContainer>
       )}
     </div>
   );
