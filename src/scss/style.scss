@@ -6,8 +6,16 @@ $enable-rtl: true;
 // Import CoreUI for React components library
 @import "@coreui/coreui/scss/coreui";
 
+$primary: #67237e !default;
+
+$theme-colors: (
+    "primary": $primary,
+);
+
+@import "custom";
+
+@import "variables";
 @import "layout";
 //@import "example";
 
 // // If you want to add custom CSS you can put it here.
-//@import "custom";

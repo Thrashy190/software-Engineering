@@ -8,9 +8,107 @@ import {
   Checkbox,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CustomTextField from "../../components/custom/CustomTextField";
+import { useAuth } from "../../context/AuthContext";
+import { EMAIL_REGEX } from "../../utils/regex";
+import Notification from "../../components/shared/Notifications";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { signUp } = useAuth();
+  const [check, setCheck] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  const [user, setUser] = React.useState({
+    name: "",
+    lastname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [notify, setNotify] = React.useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+
+  const handleInputs = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleCheck = (e) => {
+    setCheck(e.target.checked);
+  };
+
+  const handleCreateUser = async () => {
+    if (!check) {
+      setNotify({
+        isOpen: true,
+        message: "Debes aceptar los terminos y condiciones",
+        type: "error",
+      });
+      return;
+    }
+
+    if (user.password !== user.confirmPassword) {
+      setNotify({
+        isOpen: true,
+        message: "Las contraseñas no coinciden",
+        type: "error",
+      });
+      return;
+    }
+
+    if (user.password.length < 6) {
+      setNotify({
+        isOpen: true,
+        message: "La contraseña debe tener al menos 6 caracteres",
+        type: "error",
+      });
+      return;
+    }
+
+    if (user.name === "" || user.lastname === "") {
+      setNotify({
+        isOpen: true,
+        message: "Debes ingresar tu nombre y apellido",
+        type: "error",
+      });
+      return;
+    } else if (user.email === "") {
+      setNotify({
+        isOpen: true,
+        message: "Debes ingresar tu correo electronico",
+        type: "error",
+      });
+      return;
+    }
+
+    if (user.confirmPassword === "") {
+      setNotify({
+        isOpen: true,
+        message: "Debes confirmar tu contraseña",
+        type: "error",
+      });
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(user.email)) {
+      setNotify({
+        isOpen: true,
+        message: "Debes ingresar un correo electronico valido",
+        type: "error",
+      });
+      return;
+    }
+
+    await signUp(user);
+  };
 
   return (
     <div className=" flex justify-center items-center">
@@ -21,29 +119,52 @@ const Register = () => {
           </Typography>
         </div>
         <div className="flex flex-row gap-4">
-          <TextField
-            fullWidth
-            color="primary"
+          <CustomTextField
             label="Nombres"
-            variant="outlined"
+            value={user.name}
+            name="name"
+            onChange={handleInputs}
           />
-          <TextField
-            fullWidth
-            color="primary"
+          <CustomTextField
             label="Apellidos"
-            variant="outlined"
+            value={user.lastname}
+            name="lastname"
+            onChange={handleInputs}
           />
         </div>
-
-        <TextField fullWidth color="primary" label="Email" variant="outlined" />
-
-        <TextField color="primary" label="Contraseña" variant="outlined" />
-        <TextField color="primary" label="Contraseña" variant="outlined" />
+        <CustomTextField
+          label="Correo electronico"
+          value={user.email}
+          name="email"
+          onChange={handleInputs}
+        />
+        <CustomTextField
+          label="Contraseña"
+          value={user.password}
+          name="password"
+          onChange={handleInputs}
+        />
+        <CustomTextField
+          label="Confirmar contraseña"
+          value={user.confirmPassword}
+          name="confirmPassword"
+          onChange={handleInputs}
+        />
         <div className="flex justify-start">
           <FormGroup>
             <FormControlLabel
-              color="primary"
-              control={<Checkbox color="primary" />}
+              onChange={handleCheck}
+              control={
+                <Checkbox
+                  color="primary"
+                  sx={{
+                    color: (theme) => theme.palette.primary.main,
+                    "&.Mui-checked": {
+                      color: (theme) => theme.palette.primary.main,
+                    },
+                  }}
+                />
+              }
               label={
                 <Typography color="primary">
                   He leído y acepto la Términos del servicio y Política de
@@ -53,18 +174,31 @@ const Register = () => {
             />
           </FormGroup>
         </div>
-        <Button fullWidth variant="contained">
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={() => handleCreateUser()}
+          disabled={!check}
+        >
           Crea tu cuenta aqui
         </Button>
         <div className="flex justify-end flex-row gap-2">
           <Typography color="primary">¿Ya tienes una cuenta?</Typography>
           <div onClick={() => navigate("/login")}>
-            <Typography color="#f5f5f5" display="inline">
+            <Typography
+              sx={{
+                textDecoration: "underline",
+                cursor: "pointer",
+                color: "white",
+                ":hover": { color: (theme) => theme.palette.primary.main },
+              }}
+            >
               Inicia sesión aqui
             </Typography>
           </div>
         </div>
       </div>
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </div>
   );
 };

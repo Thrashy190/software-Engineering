@@ -7,7 +7,14 @@ import React, {
 } from "react";
 import Notification from "../components/shared/Notifications";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
+import {
+  AuthErrorCodes,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  deleteUser,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const UserContext = createContext();
 
@@ -28,16 +35,24 @@ const AuthProvider = ({ children }) => {
   };
 
   const login = async (user) => {
-    await auth
-      .signInWithEmailAndPassword(user.email, user.password)
-      .then((userCredential) => {
+    console;
+    signInWithEmailAndPassword(auth, user.email, user.password)
+      .then(async (userCredential) => {
         setCurrentUser(userCredential.user);
+        await getDoc(doc(db, "users", userCredential.user.uid)).then((doc) => {
+          if (doc.exists()) {
+            if (doc.data().role === "admin") {
+              navigate("/admin/home");
+            } else {
+              navigate("/mycourses");
+            }
+          }
+        });
         setNotify({
           isOpen: true,
           message: "Inicio de sesión exitoso",
           type: "success",
         });
-        navigate("/home");
       })
       .catch((error) => {
         setNotify({
@@ -49,23 +64,53 @@ const AuthProvider = ({ children }) => {
   };
 
   const signUp = async (user) => {
-    await auth
-      .createUserWithEmailAndPassword(auth, user.email, user.password)
-      .then((userCredential) => {
-        currentUser(userCredential.user);
-        setNotify({
-          isOpen: true,
-          message: "Usuario creado con exito",
-          type: "success",
-        });
-        navigate("/login");
+    console.log(user);
+    createUserWithEmailAndPassword(auth, user.email, user.password)
+      .then(async (userCredential) => {
+        const userRef = doc(db, "users", userCredential.user.uid);
+        await setDoc(userRef, {
+          name: user.name,
+          lastname: user.lastname,
+          email: user.email,
+          createdAt: new Date(),
+          role: "user",
+        })
+          .then(() => {
+            setCurrentUser(userCredential.user);
+            setNotify({
+              isOpen: true,
+              message: "Usuario creado con exito",
+              type: "success",
+            });
+            navigate("/mycourses");
+          })
+          .catch((error) => {
+            if (error instanceof Error) {
+              deleteUser(userCredential.user);
+              setNotify({
+                isOpen: true,
+                message: "Algo salio mal, intentelo mas tarde",
+                type: "error",
+              });
+            }
+          });
       })
       .catch((error) => {
-        setNotify({
-          isOpen: true,
-          message: "Error al momento de crear el usuario",
-          type: "error",
-        });
+        if (error instanceof Error) {
+          if (error.message.includes(AuthErrorCodes.EMAIL_EXISTS)) {
+            setNotify({
+              isOpen: true,
+              message: "El correo ya esta en uso",
+              type: "error",
+            });
+            return;
+          }
+          setNotify({
+            isOpen: true,
+            message: "Algo salio mal, intentelo mas tarde",
+            type: "error",
+          });
+        }
       });
   };
 

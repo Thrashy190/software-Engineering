@@ -1,5 +1,6 @@
 import React from "react";
 import CIcon from "@coreui/icons-react";
+import { CNavGroup } from "@coreui/react";
 import {
   cilHome,
   cilClipboard,
@@ -10,7 +11,7 @@ import {
 } from "@coreui/icons";
 import { CNavItem, CNavTitle } from "@coreui/react";
 
-const _adminNav = [
+const _admin = [
   {
     component: CNavTitle,
     name: "General",
@@ -22,10 +23,27 @@ const _adminNav = [
     icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
+    component: CNavGroup,
     name: "Cursos",
     to: "/admin/courses",
     icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: "Cursos",
+        to: "/admin/courses",
+      },
+      {
+        component: CNavItem,
+        name: "Crear curso",
+        to: "/admin/create-courses",
+      },
+      {
+        component: CNavItem,
+        name: "Editar cursos",
+        to: "/admin/editar-courses",
+      },
+    ],
   },
   {
     component: CNavItem,
@@ -57,4 +75,4 @@ const _adminNav = [
   },
 ];
 
-export default _adminNav;
+export default _admin;
