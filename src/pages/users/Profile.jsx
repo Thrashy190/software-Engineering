@@ -1,25 +1,48 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { Typography, TextField, Button } from '@mui/material';
 import { CContainer, CRow, CCol } from "@coreui/react";
 
 import UserNav from '../../components/users/UserNav';
 import CustomTextField from '../../components/custom/CustomTextField';
-
-import { useEffect } from 'react';
+import Notification from '../../components/shared/Notifications';
 
 import { useAuth } from '../../context/AuthContext';
 
-import { getDocument } from '../../firebase/firestore';
+import { getDocument, updateDocument } from '../../firebase/firestore';
 
 const Profile = () => {
-
   const { currentUser } = useAuth();
 
   const [user, setUser] = useState({});
 
-  useEffect(() => {
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: '',
+    type: '',
+  });
 
+  const onSave = async (user) => {
+    console.log(user);
+    await updateDocument('users', currentUser.uid, user)
+      .then(() => {
+        setNotify({
+          isOpen: true,
+          message: 'Datos actualizados',
+          type: 'success',
+        });
+      })
+      .catch((error) => {
+        setNotify({
+          isOpen: true,
+          message: error.message,
+          type: 'error',
+        });
+      });
+  }
+
+  useEffect(() => {
     const getUser = async () => {
       const myUser = await getDocument('users', currentUser.uid);
       setUser(myUser);
@@ -34,7 +57,7 @@ const Profile = () => {
 
   return (
     <>
-      <CContainer>
+      <CContainer className='pt-5'>
         <CRow>
           <CCol xs={3}>
             <UserNav />
@@ -68,13 +91,14 @@ const Profile = () => {
             <Button
               variant="contained"
               style={{ marginLeft: 'auto' }}
-              onClick={() => { }}
+              onClick={() => onSave(user)}
             >
               Guardar
             </Button>
           </CCol>
         </CRow>
       </CContainer>
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </>
   );
 };
