@@ -4,6 +4,8 @@ import { Typography, TextField, Button } from '@mui/material';
 import { CContainer, CRow, CCol } from "@coreui/react";
 
 import UserNav from '../../components/users/UserNav';
+import CustomTextField from '../../components/custom/CustomTextField';
+
 import { useEffect } from 'react';
 
 import { useAuth } from '../../context/AuthContext';
@@ -14,7 +16,7 @@ const Profile = () => {
 
   const { currentUser } = useAuth();
 
-  const [ user, setUser] = useState({});
+  const [user, setUser] = useState({});
 
   useEffect(() => {
 
@@ -24,7 +26,11 @@ const Profile = () => {
     }
 
     getUser();
-  }, [])
+  }, []);
+
+  const handleInputs = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  }
 
   return (
     <>
@@ -35,53 +41,34 @@ const Profile = () => {
           </CCol>
           <CCol className='flex items-center flex-col gap-3'>
             <Typography color="primary" variant="h4">
-              Perfil de { user.name }
+              Perfil
             </Typography>
 
-            <TextField
-              color="primary"
-              id="outlined-basic"
-              label="Nombre"
-              variant="outlined"
-              fullWidth
+            <CustomTextField
+              label={user.name ? '' : 'Nombre'}
+              value={user.name}
+              name="name"
+              onChange={handleInputs}
             />
 
-            <TextField
-              color="primary"
-              id="outlined-basic"
-              label="Apellido"
-              variant="outlined"
-              fullWidth
+            <CustomTextField
+              label={user.lastname ? '' : 'Apellido'}
+              value={user.lastname}
+              name="lastname"
+              onChange={handleInputs}
             />
 
-            <TextField
-              color="primary"
-              id="outlined-basic"
-              label="Correo"
-              variant="outlined"
-              fullWidth
-            />
-
-            <TextField
-              color="primary"
-              id="outlined-basic"
-              label="Contraseña"
-              variant="outlined"
-              fullWidth
-            />
-
-            <TextField
-              color="primary"
-              id="outlined-basic"
-              label="Confirmar contraseña"
-              variant="outlined"
-              fullWidth
+            <CustomTextField
+              label={user.email ? '' : 'Correo'}
+              value={user.email}
+              name="email"
+              onChange={handleInputs}
             />
 
             <Button
               variant="contained"
-              // Align the button to the right
               style={{ marginLeft: 'auto' }}
+              onClick={() => { }}
             >
               Guardar
             </Button>
