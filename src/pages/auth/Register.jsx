@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CustomTextField from "../../components/custom/CustomTextField";
+import CustomPasswordTextField from "../../components/custom/CustomPasswordTextField";
 import { useAuth } from "../../context/AuthContext";
 import { EMAIL_REGEX } from "../../utils/regex";
 import Notification from "../../components/shared/Notifications";
@@ -138,13 +139,13 @@ const Register = () => {
           name="email"
           onChange={handleInputs}
         />
-        <CustomTextField
+        <CustomPasswordTextField
           label="Contraseña"
           value={user.password}
           name="password"
           onChange={handleInputs}
         />
-        <CustomTextField
+        <CustomPasswordTextField
           label="Confirmar contraseña"
           value={user.confirmPassword}
           name="confirmPassword"

@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import "./scss/style.scss";
+import ProtectedRoute from "./components/shared/ProtectedRoute";
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -24,33 +25,37 @@ import PaymentsList from "./pages/admin/Payments";
 
 function App() {
   return (
-    <>
+    <div className="bg-red-900">
       <Routes>
-        <Route path="" element={<UserLayout />}>
+        <Route element={<UserLayout />}>
           <Route index element={<Landing />} />
           <Route path="home" element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
-          <Route path="ph-review" element={<Review>Reseña</Review>} />
           <Route path="recover-password" element={<RecoverPassword />} />
           <Route path="course" element={<Course />} />
-          <Route path="lection" element={<Lection />} />
           <Route path="courses" element={<CourseList />} />
-          <Route path="mycourses" element={<MyCourses />} />
-          <Route path="profile" element={<ProfileUser />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="review" element={<Review />} />
+            <Route path="lection" element={<Lection />} />
+            <Route path="mycourses" element={<MyCourses />} />
+            <Route path="profile" element={<ProfileUser />} />
+          </Route>
         </Route>
         <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} />
-          <Route path="users" element={<UsersList />} />
-          <Route path="payments" element={<PaymentsList />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="create-courses" element={<CourseCreator />} />
-          <Route path="editar-courses" element={<div>Editar Courses</div>} />
-          <Route path="profile" element={<ProfileAdmin />} />
+          <Route element={<ProtectedRoute />}>
+            <Route index element={<Home />} />
+            <Route path="home" element={<Home />} />
+            <Route path="users" element={<UsersList />} />
+            <Route path="payments" element={<PaymentsList />} />
+            <Route path="courses" element={<Courses />} />
+            <Route path="create-courses" element={<CourseCreator />} />
+            <Route path="editar-courses" element={<div>Editar Courses</div>} />
+            <Route path="profile" element={<ProfileAdmin />} />
+          </Route>
         </Route>
       </Routes>
-    </>
+    </div>
   );
 }
 
