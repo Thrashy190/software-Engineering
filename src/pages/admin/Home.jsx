@@ -12,6 +12,7 @@ import {
 
 const Home = () => {
   const [usersCount, setUsersCount] = React.useState(0);
+  const [coursesCount, setCoursesCount] = React.useState(0);
 
   useEffect(() => {
     let start = new Date();
@@ -19,14 +20,23 @@ const Home = () => {
     end.setDate(end.getDate() - 7);
 
     const fetchCount = async () => {
-      const coll = collection(db, "users");
-      const q = query(
-        coll,
+      const collUsers = collection(db, "users");
+      const qUsers = query(
+        collUsers,
         where("createdAt", "<", start),
         where("createdAt", ">", end)
       );
-      const snapshot = await getCountFromServer(q);
-      setUsersCount(snapshot.data().count);
+      const snapshotUsers = await getCountFromServer(qUsers);
+      setUsersCount(snapshotUsers.data().count);
+
+      const collCourses = collection(db, "courses");
+      const qCourses = query(
+        collCourses,
+        where("createdAt", "<", start),
+        where("createdAt", ">", end)
+      );
+      const snapshotCourses = await getCountFromServer(qCourses);
+      setCoursesCount(snapshotCourses.data().count);
     };
 
     fetchCount();
@@ -64,7 +74,29 @@ const Home = () => {
               value={usersCount}
             />
           </CCol>
-          <CCol></CCol>
+          <CCol>
+            <CWidgetStatsF
+              className="mb-3"
+              color="secondary"
+              footer={
+                <CLink
+                  className="font-weight-bold font-xs text-medium-emphasis"
+                  href="/admin/courses"
+                  rel="noopener norefferer"
+                >
+                  Ver mas sobre Cursos aqui
+                  <CIcon
+                    icon={cilArrowRight}
+                    className="float-end"
+                    width={16}
+                  />
+                </CLink>
+              }
+              icon={<CIcon icon={cilChartPie} height={24} />}
+              title="Cursos nuevos en los ultimos 7 dias"
+              value={coursesCount}
+            />
+          </CCol>
         </CRow>
       </CContainer>
     </>
