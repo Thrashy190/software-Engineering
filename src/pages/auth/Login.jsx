@@ -1,20 +1,14 @@
 import React from "react";
 import { Typography, TextField, Button } from "@mui/material";
 import CustomTextField from "../../components/custom/CustomTextField";
+import CustomPasswordTextField from "../../components/custom/CustomPasswordTextField";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import Notification from "../../components/shared/Notifications";
 
 const Login = () => {
   const { login } = useAuth();
-  const [showPassword, setShowPassword] = React.useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   const navigate = useNavigate();
+
   const [user, setUser] = React.useState({
     email: "",
     password: "",
@@ -38,7 +32,7 @@ const Login = () => {
           name="email"
           onChange={handleInputs}
         />
-        <CustomTextField
+        <CustomPasswordTextField
           label="Contraseña"
           value={user.password}
           name="password"

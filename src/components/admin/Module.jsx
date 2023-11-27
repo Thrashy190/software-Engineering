@@ -1,6 +1,7 @@
 // Modulo.js
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ButtonModalDelete from "../course/ButtonModalDelete";
 import Leccion from "./Lection";
 import { Button } from "@mui/material";
 import { CContainer, CRow, CCol } from "@coreui/react";
@@ -67,13 +68,7 @@ const Modulo = ({ index, eliminarModulo }) => {
           ))}
           <CRow className="py-4 flex justify-end">
             <CCol>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => eliminarModulo(index)}
-              >
-                Eliminar Módulo
-              </Button>
+              <ButtonModalDelete eliminarModulo={() => eliminarModulo(index)} />
             </CCol>
             <CCol>
               <Button
