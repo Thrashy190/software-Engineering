@@ -7,18 +7,10 @@ import Typography from "@mui/material/Typography";
 import RatingStars from "../shared/RatingStarts";
 import { formatCurrencyToMXN } from "../../utils/formatter";
 import { downloadImage } from "../../firebase/storage";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
-  const {
-    courseName,
-    courseCreator,
-    coursePrice,
-    courseReviews,
-    courseRating,
-    courseThumbNail,
-    courseProgress,
-  } = courseData;
+  const { id, title, price, reviews, thumbnail, courseProgress } = courseData;
 
   const [imageUrl, setImageUrl] = useState(null);
   const navigate = useNavigate();
@@ -26,7 +18,7 @@ const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = await downloadImage(courseThumbNail);
+        const url = await downloadImage(thumbnail);
         setImageUrl(url);
       } catch (error) {
         console.error("Error al obtener la imagen:", error);
@@ -46,7 +38,7 @@ const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
             color: fontColor,
             cursor: "pointer",
           }}
-          onClick={() => navigate("/course")}
+          onClick={() => navigate(`/course/${id}`)}
         >
           <CardMedia
             component="img"
@@ -56,15 +48,22 @@ const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
           />
           <CardContent>
             <Typography gutterBottom variant="h6">
-              {courseName}
+              {title}
             </Typography>
-            <Typography variant="body">by {courseCreator}</Typography>
+            <Typography variant="body">Por Jorge Ferretiz</Typography>
             <Typography variant="body">
-              <RatingStars rating={courseRating} totalReviews={courseReviews} />
+              {
+                reviews ? 
+                <RatingStars
+                  rating={reviews}
+                  totalReviews={reviews.length}
+                  fontColor={"#ffffff"}
+                /> : null
+              }
             </Typography>
-            {coursePrice && (
+            {price && (
               <Typography variant="body">
-                {formatCurrencyToMXN(coursePrice)} MXN
+                {formatCurrencyToMXN(price)} MXN
               </Typography>
             )}
             {courseProgress && (

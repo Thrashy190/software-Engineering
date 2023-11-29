@@ -4,7 +4,8 @@ import { useAuth } from "../../context/AuthContext";
 
 const ProtectedRoute = () => {
   const { currentUser } = useAuth();
-  return currentUser ? <Outlet /> : <Navigate to="/login" />;
+  const items = JSON.parse(localStorage.getItem("user"));
+  return items ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

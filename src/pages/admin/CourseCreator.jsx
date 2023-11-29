@@ -1,7 +1,7 @@
 import SaveCourse from "./SaveCourse.jsx";
 
 const CourseCreator = () => {
-  return <SaveCourse/>;
+  return <SaveCourse />;
 };
 
 export default CourseCreator;

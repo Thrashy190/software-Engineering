@@ -17,6 +17,7 @@ import Modulo from "../../components/admin/Module";
 import Examen from "../../components/admin/Exam";
 import Notification from "../../components/shared/Notifications";
 import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../stripe/stripe";
 
 const marks = [
   {
@@ -114,11 +115,14 @@ const SaveCourse = (props) => {
   const saveAndPublish = async () => {
     await uploadFiles(file, "miniaturas").then(async (response) => {
       const { title, summary, level, price, description, target } = data;
+      const stripeId = await createProduct(title, description, price);
+      console.log(stripeId);
       const course = {
         title,
         summary,
         level,
         price,
+        priceId: stripeId,
         description,
         target,
         status: "published",

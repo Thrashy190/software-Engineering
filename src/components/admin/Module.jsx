@@ -26,7 +26,7 @@ const Modulo = ({ index, modulo, eliminarModulo, modulos, setModulos }) => {
     setExpandedModule((prev) => (prev === index ? null : index));
   };
 
-  const updateModuleNameInArray = (e, index) => {
+  const updateModuleNameInArray = (e) => {
     setName(e.target.value);
     const newModules = [...modulos];
     newModules[index].name = e.target.value;
@@ -66,7 +66,7 @@ const Modulo = ({ index, modulo, eliminarModulo, modulos, setModulos }) => {
           <CRow>
             <CCol>
               <TextField
-                onChange={(e) => updateModuleNameInArray(e, index)}
+                onChange={(e) => updateModuleNameInArray(e)}
                 value={name}
                 name="name-module"
                 color="secondary"
@@ -80,9 +80,9 @@ const Modulo = ({ index, modulo, eliminarModulo, modulos, setModulos }) => {
               lecciones={lecciones}
               eliminarLeccion={eliminarLeccion}
               key={leccionIndex}
+              indexModule={index}
               leccion={leccion}
               index={leccionIndex}
-              indexModule={index}
               setModulos={setModulos}
               modulos={modulos}
             />

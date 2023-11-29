@@ -1,9 +1,15 @@
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-const RatingStars = ({ rating, totalReviews, fontColor }) => {
+const RatingStars = ({ ratingArray, totalReviews, fontColor }) => {
+  const rating = 0;
   const MAX_STARS = 5;
   const filledStars = Math.round(rating / 2);
+  if (ratingArray) {
+    rating =
+      ratingArray.reduce((acc, curr) => acc + curr.rate, 0) /
+      ratingArray.length;
+  }
 
   const renderStars = () => {
     return Array.from({ length: MAX_STARS }, (_, index) => (

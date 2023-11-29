@@ -9,10 +9,10 @@ const Leccion = ({
   lecciones,
   setLecciones,
   index,
-  eliminarLeccion,
   indexModule,
-  setModulos,
+  eliminarLeccion,
   modulos,
+  setModulos,
 }) => {
   const [expandedModule, setExpandedModule] = useState(null);
   const [data, setData] = useState({
