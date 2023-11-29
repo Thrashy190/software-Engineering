@@ -7,10 +7,10 @@ import Typography from "@mui/material/Typography";
 import RatingStars from "../shared/RatingStarts";
 import { formatCurrencyToMXN } from "../../utils/formatter";
 import { downloadImage } from "../../firebase/storage";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
-  const { title, price, reviews, thumbnail, courseProgress } = courseData;
+  const { id, title, price, reviews, thumbnail, courseProgress } = courseData;
 
   const [imageUrl, setImageUrl] = useState(null);
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
             color: fontColor,
             cursor: "pointer",
           }}
-          onClick={() => navigate("/course")}
+          onClick={() => navigate(`/course/${id}`)}
         >
           <CardMedia
             component="img"

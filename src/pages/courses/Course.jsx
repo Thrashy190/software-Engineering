@@ -11,14 +11,20 @@ import { formatCurrencyToMXN } from "../../utils/formatter";
 import ModuleList from "../../components/course/ModuleList";
 import CircularProgress from "@mui/material/CircularProgress";
 import { checkout } from "../../stripe/stripe";
+import { useParams } from "react-router-dom";
+import { getDocument } from "../../firebase/firestore";
+import { set } from "lodash";
 
 const Course = () => {
   const [imageUrl, setImageUrl] = useState(null);
-
+  const [courseData, setCourseData] = useState(null);
+  const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = await downloadImage("miniaturas/f1.jpeg");
+        const course = await getDocument("courses", id);
+        setCourseData(course);
+        const url = await downloadImage(course.thumbnail);
         setImageUrl(url);
       } catch (error) {
         console.error("Error al obtener la imagen:", error);
@@ -94,7 +100,7 @@ const Course = () => {
                   />
                 </div>
                 <div className="text-white text-2xl font-bold">
-                  Pro Game Development
+                  {courseData.title}
                 </div>
                 <div className="text-[#FAD264] font-light">
                   By Jorge Ferrétiz González
@@ -134,17 +140,16 @@ const Course = () => {
                   <img src={imageUrl} alt="Curso" className="h-72" />
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Button variant="contained"
+                  <Button
+                    variant="contained"
                     onClick={() => {
-                      const priceId = 'price_1OCVnyERvGDcn810H1SOSDk7'
-                      checkout(priceId)
+                      const priceId = "price_1OCVnyERvGDcn810H1SOSDk7";
+                      checkout(priceId);
                     }}
                   >
                     Comprar curso o iniciar sesion
                   </Button>
-                  <Button variant="outlined">
-                    Reseñar curso
-                  </Button>
+                  <Button variant="outlined">Reseñar curso</Button>
                 </div>
               </CCol>
             </CRow>
