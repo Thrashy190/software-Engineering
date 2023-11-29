@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {CCol, CContainer, CRow} from "@coreui/react";
+import React, { useState } from "react";
+import { CCol, CContainer, CRow } from "@coreui/react";
 import {
   Button,
   TextField,
@@ -7,12 +7,16 @@ import {
   OutlinedInput,
   InputAdornment,
 } from "@mui/material";
-import {addDocument, createCourse, updateDocument} from "../../firebase/firestore";
-import {uploadFiles} from "../../firebase/storage";
+import {
+  addDocument,
+  createCourse,
+  updateDocument,
+} from "../../firebase/firestore";
+import { uploadFiles } from "../../firebase/storage";
 import Modulo from "../../components/admin/Module";
 import Examen from "../../components/admin/Exam";
 import Notification from "../../components/shared/Notifications";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const marks = [
   {
@@ -29,8 +33,8 @@ const marks = [
   },
 ];
 
-const SaveCourse = props => {
-  const {courseParams, existingModules, courseId} = props;
+const SaveCourse = (props) => {
+  const { courseParams, existingModules, courseId } = props;
   console.log(courseParams);
   const isNew = !courseParams;
   const navigate = useNavigate();
@@ -53,7 +57,7 @@ const SaveCourse = props => {
   const [data, setData] = React.useState(courseParams ?? initialData);
 
   const agregarModulo = () => {
-    setModulos([...modulos, {id: new Date().getTime()}]);
+    setModulos([...modulos, { id: new Date().getTime() }]);
   };
 
   const eliminarModulo = (index) => {
@@ -63,7 +67,7 @@ const SaveCourse = props => {
   };
 
   const handleChange = (e) => {
-    setData({...data, [e.target.name]: e.target.value});
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   // const agregarPregunta = () => {
@@ -71,31 +75,31 @@ const SaveCourse = props => {
   // };
 
   const handleSave = async () => {
-    console.log(modulos);
-    // await uploadFiles(file, "miniaturas").then(async (response) => {
-    //   const { title, summary, level, price, description, target } = data;
-    //   const course = {
-    //     title,
-    //     summary,
-    //     level,
-    //     price,
-    //     description,
-    //     target,
-    //     status: "draft",
-    //     createdAt: new Date(),
-    //     reviews: [],
-    //     thumbnail: response.fullPath,
-    //   };
-    //   await createCourse("courses", course).then((response) => {
-    //     console.log(response);
-    //     setNotify({
-    //       isOpen: true,
-    //       message: "Curso guardado con exito",
-    //       type: "success",
-    //     });
-    //     navigate("/admin/courses");
-    //   });
-    // });
+    console.log("modulos", modulos);
+    await uploadFiles(file, "miniaturas").then(async (response) => {
+      const { title, summary, level, price, description, target } = data;
+      const course = {
+        title,
+        summary,
+        level,
+        price,
+        description,
+        target,
+        status: "draft",
+        createdAt: new Date(),
+        reviews: [],
+        thumbnail: response.fullPath,
+      };
+      await createCourse("courses", course, modulos).then((response) => {
+        console.log(response);
+        setNotify({
+          isOpen: true,
+          message: "Curso guardado con exito",
+          type: "success",
+        });
+        navigate("/admin/courses");
+      });
+    });
   };
 
   const addImage = (e) => {
@@ -108,24 +112,34 @@ const SaveCourse = props => {
   };
 
   const saveAndPublish = async () => {
-    console.log(data);
-    const {title, summary, level, price, description, target} = data;
-    const course = {
-      title,
-      summary,
-      level,
-      price,
-      description,
-      target,
-      status: "published",
-      createdAt: new Date(),
-    };
-    addDocument("courses", course);
-    navigate("/admin/courses");
-  }
+    await uploadFiles(file, "miniaturas").then(async (response) => {
+      const { title, summary, level, price, description, target } = data;
+      const course = {
+        title,
+        summary,
+        level,
+        price,
+        description,
+        target,
+        status: "published",
+        createdAt: new Date(),
+        reviews: [],
+        thumbnail: response.fullPath,
+      };
+      await createCourse("courses", course, modulos).then((response) => {
+        console.log(response);
+        setNotify({
+          isOpen: true,
+          message: "Curso guardado con exito",
+          type: "success",
+        });
+        navigate("/admin/courses");
+      });
+    });
+  };
 
   const updateAndPublish = async () => {
-    const {title, summary, level, price, description, target} = data;
+    const { title, summary, level, price, description, target } = data;
     const course = {
       title,
       summary,
@@ -138,7 +152,7 @@ const SaveCourse = props => {
 
     updateDocument("courses", courseId, course);
     navigate("/admin/courses");
-  }
+  };
 
   return (
     <>
@@ -146,13 +160,13 @@ const SaveCourse = props => {
         <CRow className="pb-10">
           <CCol>
             <div className="text-4xl font-bold text-[#67237E]">
-              { isNew ? "Crear nuevo curso" : "Editar curso" }
+              {isNew ? "Crear nuevo curso" : "Editar curso"}
             </div>
           </CCol>
           <CCol className="flex justify-end">
             <div className="flex gap-4">
               <Button variant="contained" onClick={handlePublish}>
-                { isNew ? "Publicar" : "Editar y publicar" }
+                {isNew ? "Publicar" : "Editar y publicar"}
               </Button>
               <Button variant="contained" onClick={handleSave}>
                 Guardar curso
@@ -194,7 +208,6 @@ const SaveCourse = props => {
               id="raised-button-file"
               type="file"
             />
-            <Button onClick={uploadFiles}>press</Button>
             <CRow className="py-10">
               <CCol>
                 <OutlinedInput
@@ -260,7 +273,7 @@ const SaveCourse = props => {
         <CRow className="pt-10">
           <CCol>
             <div className="text-2xl font-bold text-[#67237E]">
-              Modulos / Lecciones / Examenes
+              Modulos / Lecciones
             </div>
           </CCol>
         </CRow>
@@ -285,7 +298,7 @@ const SaveCourse = props => {
           <CCol className="flex justify-end">
             <div className="flex gap-4">
               <Button variant="contained" onClick={handlePublish}>
-                { isNew ? "Crear nuevo curso" : "Editar curso" }
+                {isNew ? "Crear nuevo curso" : "Editar curso"}
               </Button>
               <Button variant="contained" onClick={handleSave}>
                 Guardar curso
@@ -294,7 +307,7 @@ const SaveCourse = props => {
           </CCol>
         </CRow>
       </CContainer>
-      <Notification notify={notify} setNotify={setNotify} position={"top"}/>
+      <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </>
   );
 };

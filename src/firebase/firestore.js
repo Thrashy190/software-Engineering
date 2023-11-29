@@ -39,69 +39,8 @@ export const getDocument = async (collectionName, documentId) => {
 };
 
 
-export const createCourse = async (collectionName, document) => {
-    const modules = [
-        {
-            name: 'module 1',
-            lessons: [
-                {
-                    name: 'lesson 1',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-                {
-                    name: 'lesson 2',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-                {
-                    name: 'lesson 3',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-            ]
-        },
-        {
-            name: 'module 2',
-            lessons: [
-                {
-                    name: 'lesson 1',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-                {
-                    name: 'lesson 2',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-                {
-                    name: 'lesson 3',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-            ]
-        },
-        {
-            name: 'module 3',
-            lessons: [
-                {
-                    name: 'lesson 1',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-                {
-                    name: 'lesson 2',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-                {
-                    name: 'lesson 3',
-                    type: 'video',
-                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
-                },
-            ]
-        },
-    ]
+export const createCourse = async (collectionName, document, modules) => {
+
 
     const courseRef = collection(db, collectionName);
     const documentCourseRef = await addDoc(courseRef, document);
@@ -109,7 +48,7 @@ export const createCourse = async (collectionName, document) => {
     for (const module of modules) {
         const moduleRef = collection(db, `${collectionName}/${documentCourseRef.id}/modules`);
         const documentmoduleRef = await addDoc(moduleRef, { name: module.name });
-        for (const lesson of module.lessons) {
+        for (const lesson of module.leccion) {
             const lessonRef = collection(db, `${collectionName}/${documentCourseRef.id}/modules/${documentmoduleRef.id}/lessons`);
             const documentlessonRef = await addDoc(lessonRef, lesson);
             console.log(documentlessonRef)
@@ -136,66 +75,63 @@ export const deleteDocument = async (collectionName, documentId) => {
     return documentDeleted;
 };
 
-export const getCollectionWhere = async (
-    collectionName,
-    field,
-    operator,
-    value
-) => {
+export const getCollectionWithSubcollections = async (collectionName) => {
+    const collectionData = [];
     const collectionRef = collection(db, collectionName);
-    const q = query(collectionRef, where(field, operator, value));
-    const collectionSnapshot = await getDocs(q);
-    const collectionData = collectionSnapshot.docs.map((doc) => doc.data());
+    const collectionSnapshot = await getDocs(collectionRef);
+
+    for (const doc of collectionSnapshot.docs) {
+        const docData = doc.data();
+        const modulosCollectionRef = collection(doc.ref, 'modulos');
+        const modulosSnapshot = await getDocs(modulosCollectionRef);
+
+        const modulosData = [];
+
+        for (const moduloDoc of modulosSnapshot.docs) {
+            const moduloData = moduloDoc.data();
+            const leccionesCollectionRef = collection(moduloDoc.ref, 'lecciones');
+            const leccionesSnapshot = await getDocs(leccionesCollectionRef);
+
+            const leccionesData = leccionesSnapshot.docs.map(leccionDoc => ({
+                ...leccionDoc.data(),
+                id: leccionDoc.id
+            }));
+
+            modulosData.push({
+                ...moduloData,
+                id: moduloDoc.id,
+                lecciones: leccionesData
+            });
+        }
+
+        collectionData.push({
+            ...docData,
+            id: doc.id,
+            modulos: modulosData
+        });
+    }
+
     return collectionData;
 };
 
-export const getCollectionWhereOrder = async (
-    collectionName,
-    field,
-    operator,
-    value,
-    orderField,
-    order
-) => {
-    const collectionRef = collection(db, collectionName);
-    const q = query(
-        collectionRef,
-        where(field, operator, value),
-        orderBy(orderField, order)
-    );
-    const collectionSnapshot = await getDocs(q);
-    const collectionData = collectionSnapshot.docs.map((doc) => doc.data());
-    return collectionData;
-};
+export const updateDocumentWithSubcollections = async (collectionName, documentId, document) => {
+    const documentRef = doc(db, collectionName, documentId);
+    await updateDoc(documentRef, document);
 
-export const getDocumentWhere = async (
-    collectionName,
-    field,
-    operator,
-    value
-) => {
-    const collectionRef = collection(db, collectionName);
-    const q = query(collectionRef, where(field, operator, value));
-    const collectionSnapshot = await getDocs(q);
-    const collectionData = collectionSnapshot.docs.map((doc) => doc.data());
-    return collectionData;
-};
+    // Manejar la actualización de subcolecciones, por ejemplo, "modulos" y "lecciones"
+    if (document.modulos) {
+        for (const modulo of document.modulos) {
+            const moduloRef = collection(documentRef, 'modulos', modulo.id);
+            await updateDoc(moduloRef, modulo);
 
-export const getDocumentWhereOrder = async (
-    collectionName,
-    field,
-    operator,
-    value,
-    orderField,
-    order
-) => {
-    const collectionRef = collection(db, collectionName);
-    const q = query(
-        collectionRef,
-        where(field, operator, value),
-        orderBy(orderField, order)
-    );
-    const collectionSnapshot = await getDocs(q);
-    const collectionData = collectionSnapshot.docs.map((doc) => doc.data());
-    return collectionData;
+            if (modulo.lecciones) {
+                for (const leccion of modulo.lecciones) {
+                    const leccionRef = collection(moduloRef, 'lecciones', leccion.id);
+                    await updateDoc(leccionRef, leccion);
+                }
+            }
+        }
+    }
+
+    return true; // o cualquier otro valor que desees devolver
 };

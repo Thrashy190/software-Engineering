@@ -82,6 +82,9 @@ const Modulo = ({ index, modulo, eliminarModulo, modulos, setModulos }) => {
               key={leccionIndex}
               leccion={leccion}
               index={leccionIndex}
+              indexModule={index}
+              setModulos={setModulos}
+              modulos={modulos}
             />
           ))}
           <CRow className="py-4 flex justify-end">
