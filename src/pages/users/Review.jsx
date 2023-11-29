@@ -1,21 +1,35 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-
-import Typography from '@mui/material/Typography';
-import { Rating } from '@mui/material';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { useAuth } from "../../context/AuthContext";
+import Typography from "@mui/material/Typography";
+import { Rating } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../../firebase/firebase";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 const Review = () => {
+  const { id } = useParams();
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
   const [review, setReview] = useState({
-    comment: '',
+    comment: "",
     rate: 0,
-    userName: ''
+    userName: currentUser.email,
   });
+
+  const sendReview = async () => {
+    const courseRef = doc(db, "courses", id);
+    await updateDoc(courseRef, {
+      reviews: arrayUnion(review),
+    });
+    navigate(`/courses`);
+  };
 
   const handleCommentInput = (e) => {
     setReview({ ...review, [e.target.name]: e.target.value });
-  }
+  };
 
   return (
     <>
@@ -24,7 +38,7 @@ const Review = () => {
           {`Reseña de Curso`}
         </Typography>
       </div>
-      <div className='pt-6'>
+      <div className="pt-6">
         <Typography color="primary" variant="h6">
           Calificación
         </Typography>
@@ -40,11 +54,11 @@ const Review = () => {
             },
             ".MuiRating-iconEmpty": {
               color: (theme) => theme.palette.primary.main,
-            }
+            },
           }}
         />
       </div>
-      <div className='pt-4'>
+      <div className="pt-4">
         <TextField
           fullWidth
           label="Comentario"
@@ -76,15 +90,12 @@ const Review = () => {
         />
       </div>
       <div className="flex justify-end pt-4">
-        <Button
-          variant="contained"
-          onClick={() => console.log(review)}
-        >
+        <Button variant="contained" onClick={sendReview}>
           Enviar
         </Button>
       </div>
     </>
   );
-}
+};
 
 export default Review;

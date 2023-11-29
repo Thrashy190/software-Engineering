@@ -11,13 +11,13 @@ import { formatCurrencyToMXN } from "../../utils/formatter";
 import ModuleList from "../../components/course/ModuleList";
 import CircularProgress from "@mui/material/CircularProgress";
 import { checkout } from "../../stripe/stripe";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getDocument } from "../../firebase/firestore";
-import { set } from "lodash";
 
 const Course = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [courseData, setCourseData] = useState(null);
+  const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +112,7 @@ const Course = () => {
                     <DifficultyIcon level={courseData.level} />
                   </div>
                   <div className="text-[#FAD264] font-bold text-lg">
-                    Nivel:{" "}
+                    Nivel:
                     {courseData.level === 1
                       ? "Básico"
                       : courseData.level === 2
@@ -150,7 +150,12 @@ const Course = () => {
                   >
                     Comprar curso o iniciar sesion
                   </Button>
-                  <Button variant="outlined">Reseñar curso</Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => navigate(`/review/${id}`)}
+                  >
+                    Reseñar curso
+                  </Button>
                 </div>
               </CCol>
             </CRow>
