@@ -1,7 +1,9 @@
 import { CCol, CContainer, CRow } from "@coreui/react";
 import DataTable from "../../components/admin/DataTable";
+import {useNavigate} from "react-router-dom";
 
 const Courses = () => {
+  const navigate = useNavigate();
   const columns = [
     { field: "id", headerName: "ID", width: 200 },
     {
@@ -36,6 +38,10 @@ const Courses = () => {
         }`,
     },
   ];
+
+  const selectedRowData = (params, event, details) => {
+    navigate(`/admin/editar-courses/${params.row.id}`);
+  }
   return (
     <>
       <CContainer className="min-h-screen pt-10">
@@ -46,7 +52,7 @@ const Courses = () => {
         </CRow>
         <CRow>
           <CCol className="flex pb-6">
-            <DataTable columns={columns} collection={"courses"} />
+            <DataTable columns={columns} collection={"courses"} onRowDoubleClick={selectedRowData} />
           </CCol>
         </CRow>
       </CContainer>

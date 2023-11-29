@@ -22,6 +22,7 @@ import Home from "./pages/admin/Home";
 import Courses from "./pages/admin/Courses";
 import CourseCreator from "./pages/admin/CourseCreator";
 import PaymentsList from "./pages/admin/Payments";
+import CourseEditor from "./pages/admin/CourseEditor.jsx";
 
 function App() {
   return (
@@ -50,7 +51,7 @@ function App() {
             <Route path="payments" element={<PaymentsList />} />
             <Route path="courses" element={<Courses />} />
             <Route path="create-courses" element={<CourseCreator />} />
-            <Route path="editar-courses" element={<div>Editar Courses</div>} />
+            <Route path="editar-courses/:courseId" element={<CourseEditor />} />
             <Route path="profile" element={<ProfileAdmin />} />
           </Route>
         </Route>

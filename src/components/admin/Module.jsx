@@ -10,7 +10,7 @@ import { CContainer, CRow, CCol } from "@coreui/react";
 const Modulo = ({ index, modulo, eliminarModulo, modulos, setModulos }) => {
   const [lecciones, setLecciones] = useState([]);
   const [expandedModule, setExpandedModule] = useState(null);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(modulo.name ?? "");
 
   const agregarLeccion = (tipo) => {
     setLecciones([...lecciones, { name: tipo }]);

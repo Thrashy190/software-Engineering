@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { LinearProgress } from "@mui/material";
 import { getCollection } from "../../firebase/firestore";
 
-export default function DataTable({ columns, collection }) {
+export default function DataTable({ columns, collection, onRowDoubleClick }) {
   const [rows, setRows] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -35,6 +35,7 @@ export default function DataTable({ columns, collection }) {
             },
           }}
           pageSizeOptions={[5, 10]}
+          onCellDoubleClick={onRowDoubleClick}
           checkboxSelection
         />
       )}
