@@ -11,7 +11,6 @@ import { formatCurrencyToMXN } from "../../utils/formatter";
 import ModuleList from "../../components/course/ModuleList";
 import CircularProgress from "@mui/material/CircularProgress";
 import { checkout } from "../../stripe/stripe";
-import { checkout } from "../../stripe/stripe";
 import { useParams } from "react-router-dom";
 import { getDocument } from "../../firebase/firestore";
 
