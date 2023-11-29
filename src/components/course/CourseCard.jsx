@@ -52,11 +52,14 @@ const CourseCard = ({ courseData, backgroundColor, fontColor }) => {
             </Typography>
             <Typography variant="body">Por Jorge Ferretiz</Typography>
             <Typography variant="body">
-              <RatingStars
-                rating={reviews}
-                totalReviews={reviews.length}
-                fontColor={"#ffffff"}
-              />
+              {
+                reviews ? 
+                <RatingStars
+                  rating={reviews}
+                  totalReviews={reviews.length}
+                  fontColor={"#ffffff"}
+                /> : null
+              }
             </Typography>
             {price && (
               <Typography variant="body">

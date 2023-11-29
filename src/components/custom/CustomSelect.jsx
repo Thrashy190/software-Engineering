@@ -33,6 +33,7 @@ const CustomSelect = ({ label, value, name, onChange, children }) => {
       >
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
+          value={value}
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           label="Age"

@@ -22,7 +22,9 @@ export const useAuth = () => useContext(UserContext);
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
