@@ -16,7 +16,7 @@ const style = {
   p: 4,
 };
 
-const ButtonModalDelete = ({ eliminarModulo }) => {
+const ButtonModalDelete = ({ eliminarModulo, name }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -43,7 +43,12 @@ const ButtonModalDelete = ({ eliminarModulo }) => {
             ¿Estas seguro que quieres eliminarlo?
           </Typography>
           <div className="flex flex-row gap-4 pt-10">
-            <Button variant="contained" onClick={eliminarModulo}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                eliminarModulo(name);
+              }}
+            >
               Si, Eliminar
             </Button>
             <Button variant="contained" onClick={handleClose}>

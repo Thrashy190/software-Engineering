@@ -2,15 +2,17 @@
 import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ButtonModalDelete from "../course/ButtonModalDelete";
+import TextField from "@mui/material/TextField";
 import Leccion from "./Lection";
 import { Button } from "@mui/material";
 import { CContainer, CRow, CCol } from "@coreui/react";
 
-const Modulo = ({ index, eliminarModulo }) => {
+const Modulo = ({ index, eliminarModulo, modulos, setModulos }) => {
   const [lecciones, setLecciones] = useState([]);
+  const [expandedModule, setExpandedModule] = useState(null);
+  const [name, setName] = useState("");
 
   const agregarLeccion = (tipo) => {
-    // Lógica para agregar lección según el tipo (video o documento)
     setLecciones([...lecciones, { name: tipo }]);
   };
 
@@ -20,13 +22,16 @@ const Modulo = ({ index, eliminarModulo }) => {
     setLecciones(nuevasLecciones);
   };
 
-  const [expandedModule, setExpandedModule] = useState(null);
-
   const toggleModule = (index) => {
     setExpandedModule((prev) => (prev === index ? null : index));
   };
 
-  // Otras funciones para manejar la eliminación de lecciones y preguntas
+  const updateModuleNameInArray = (e, index) => {
+    setName(e.target.value);
+    const newModules = [...modulos];
+    newModules[index].name = e.target.value;
+    setModulos(newModules);
+  };
 
   return (
     <div
@@ -58,8 +63,21 @@ const Modulo = ({ index, eliminarModulo }) => {
       </div>
       {expandedModule === index && (
         <CContainer className="flex flex-col">
+          <CRow>
+            <CCol>
+              <TextField
+                onChange={(e) => updateModuleNameInArray(e, index)}
+                value={name}
+                name="name-module"
+                color="secondary"
+                placeholder="Nombre Modulo"
+              ></TextField>
+            </CCol>
+          </CRow>
           {lecciones.map((leccion, leccionIndex) => (
             <Leccion
+              setLecciones={setLecciones}
+              lecciones={lecciones}
               eliminarLeccion={eliminarLeccion}
               key={leccionIndex}
               leccion={leccion}
@@ -68,7 +86,7 @@ const Modulo = ({ index, eliminarModulo }) => {
           ))}
           <CRow className="py-4 flex justify-end">
             <CCol>
-              <ButtonModalDelete eliminarModulo={() => eliminarModulo(index)} />
+              <ButtonModalDelete eliminarModulo={eliminarModulo} name={name} />
             </CCol>
             <CCol>
               <Button

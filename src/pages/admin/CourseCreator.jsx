@@ -7,7 +7,7 @@ import {
   OutlinedInput,
   InputAdornment,
 } from "@mui/material";
-import { addDocument } from "../../firebase/firestore";
+import { addDocument, createCourse } from "../../firebase/firestore";
 import { uploadFiles } from "../../firebase/storage";
 import Modulo from "../../components/admin/Module";
 import Examen from "../../components/admin/Exam";
@@ -32,12 +32,13 @@ const marks = [
 const CourseCreator = () => {
   const navigate = useNavigate();
 
+  const [modulos, setModulos] = useState([]);
+  const [file, setFile] = useState(null);
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
     type: "",
   });
-
   const [data, setData] = React.useState({
     title: "",
     summary: "",
@@ -46,52 +47,52 @@ const CourseCreator = () => {
     description: "",
     target: "",
   });
-  const [modulos, setModulos] = useState([]);
-  const [examen, setExamen] = useState({ preguntas: [] });
-  const [file, setFile] = useState(null);
 
   const agregarModulo = () => {
-    setModulos([...modulos, {}]); // Puedes inicializar el módulo con la información predeterminada aquí
+    setModulos([...modulos, {}]);
   };
 
-  const eliminarModulo = (index) => {
+  const eliminarModulo = (name) => {
     const nuevosModulos = [...modulos];
-    nuevosModulos.splice(index, 1);
+    let indiceABorrar = nuevosModulos.findIndex((block) => name === block.name);
+    nuevosModulos.splice(indiceABorrar, 1);
     setModulos(nuevosModulos);
-  };
-
-  const agregarPregunta = () => {
-    setExamen({ preguntas: [...examen.preguntas, { respuestas: [] }] });
   };
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
+  // const agregarPregunta = () => {
+  //   setExamen({ preguntas: [...examen.preguntas, { respuestas: [] }] });
+  // };
+
   const handleSave = async () => {
-    await uploadFiles(file, "miniaturas").then(async (response) => {
-      const { title, summary, level, price, description, target } = data;
-      const course = {
-        title,
-        summary,
-        level,
-        price,
-        description,
-        target,
-        status: "draft",
-        createdAt: new Date(),
-        reviews: [],
-        thumbnail: response.fullPath,
-      };
-      await addDocument("courses", course).then((response) => {
-        setNotify({
-          isOpen: true,
-          message: "Curso guardado con exito",
-          type: "success",
-        });
-        navigate("/admin/courses");
-      });
-    });
+    console.log(modulos);
+    // await uploadFiles(file, "miniaturas").then(async (response) => {
+    //   const { title, summary, level, price, description, target } = data;
+    //   const course = {
+    //     title,
+    //     summary,
+    //     level,
+    //     price,
+    //     description,
+    //     target,
+    //     status: "draft",
+    //     createdAt: new Date(),
+    //     reviews: [],
+    //     thumbnail: response.fullPath,
+    //   };
+    //   await createCourse("courses", course).then((response) => {
+    //     console.log(response);
+    //     setNotify({
+    //       isOpen: true,
+    //       message: "Curso guardado con exito",
+    //       type: "success",
+    //     });
+    //     navigate("/admin/courses");
+    //   });
+    // });
   };
 
   const addImage = (e) => {
@@ -239,13 +240,19 @@ const CourseCreator = () => {
         </CRow>
         <div className="py-4">
           {modulos.map((modulo, index) => (
-            <Modulo key={index} index={index} eliminarModulo={eliminarModulo} />
+            <Modulo
+              key={index}
+              index={index}
+              eliminarModulo={eliminarModulo}
+              modulos={modulos}
+              setModulos={setModulos}
+            />
           ))}
           <Button variant="contained" className="mt-4" onClick={agregarModulo}>
             Agregar Módulo
           </Button>
         </div>
-        <Examen examen={examen} agregarPregunta={agregarPregunta} />
+        {/* <Examen examen={examen} agregarPregunta={agregarPregunta} /> */}
 
         <CRow className="py-10">
           <CCol className="flex justify-end">

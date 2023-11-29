@@ -2,6 +2,7 @@
 
 import { db } from "./firebase";
 import {
+    setDoc,
     collection,
     getDocs,
     addDoc,
@@ -36,6 +37,86 @@ export const getDocument = async (collectionName, documentId) => {
         console.log('No such document!');
     }
 };
+
+
+export const createCourse = async (collectionName, document) => {
+    const modules = [
+        {
+            name: 'module 1',
+            lessons: [
+                {
+                    name: 'lesson 1',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+                {
+                    name: 'lesson 2',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+                {
+                    name: 'lesson 3',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+            ]
+        },
+        {
+            name: 'module 2',
+            lessons: [
+                {
+                    name: 'lesson 1',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+                {
+                    name: 'lesson 2',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+                {
+                    name: 'lesson 3',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+            ]
+        },
+        {
+            name: 'module 3',
+            lessons: [
+                {
+                    name: 'lesson 1',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+                {
+                    name: 'lesson 2',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+                {
+                    name: 'lesson 3',
+                    type: 'video',
+                    content: 'https://www.youtube.com/watch?v=7YcW25PHnAA'
+                },
+            ]
+        },
+    ]
+
+    const courseRef = collection(db, collectionName);
+    const documentCourseRef = await addDoc(courseRef, document);
+
+    for (const module of modules) {
+        const moduleRef = collection(db, `${collectionName}/${documentCourseRef.id}/modules`);
+        const documentmoduleRef = await addDoc(moduleRef, { name: module.name });
+        for (const lesson of module.lessons) {
+            const lessonRef = collection(db, `${collectionName}/${documentCourseRef.id}/modules/${documentmoduleRef.id}/lessons`);
+            const documentlessonRef = await addDoc(lessonRef, lesson);
+            console.log(documentlessonRef)
+        }
+    }
+}
+
 
 export const addDocument = async (collectionName, document) => {
     const collectionRef = collection(db, collectionName);
