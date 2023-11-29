@@ -10,15 +10,22 @@ import DifficultyIcon from "../../components/shared/DifficultyIcon";
 import { formatCurrencyToMXN } from "../../utils/formatter";
 import ModuleList from "../../components/course/ModuleList";
 import CircularProgress from "@mui/material/CircularProgress";
-import { checkout, createProduct } from "../../stripe/stripe";
+import { checkout } from "../../stripe/stripe";
+import { checkout } from "../../stripe/stripe";
+import { useParams } from "react-router-dom";
+import { getDocument } from "../../firebase/firestore";
 
 const Course = () => {
   const [imageUrl, setImageUrl] = useState(null);
-
+  const [courseData, setCourseData] = useState(null);
+  const { id } = useParams();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = await downloadImage("miniaturas/f1.jpeg");
+        const course = await getDocument("courses", id);
+        console.log(course);
+        setCourseData(course);
+        const url = await downloadImage(course.thumbnail);
         setImageUrl(url);
       } catch (error) {
         console.error("Error al obtener la imagen:", error);
@@ -94,22 +101,23 @@ const Course = () => {
                   />
                 </div>
                 <div className="text-white text-2xl font-bold">
-                  Pro Game Development
+                  {courseData.title}
                 </div>
                 <div className="text-[#FAD264] font-light">
                   By Jorge Ferrétiz González
                 </div>
-                <div className="text-white ">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation
-                </div>
+                <div className="text-white ">{courseData.description}</div>
                 <div className="flex flex-row items-center gap-3">
                   <div>
-                    <DifficultyIcon level={3} />
+                    <DifficultyIcon level={courseData.level} />
                   </div>
                   <div className="text-[#FAD264] font-bold text-lg">
-                    Nivel: Avanzado
+                    Nivel:{" "}
+                    {courseData.level === 1
+                      ? "Básico"
+                      : courseData.level === 2
+                      ? "Intermedio"
+                      : "Avanzado"}
                   </div>
                 </div>
                 <div className="flex flex-row items-center gap-3">
@@ -125,7 +133,7 @@ const Course = () => {
                     <AttachMoneyIcon fontSize="large" />
                   </div>
                   <div className="text-[#FAD264] font-bold text-lg">
-                    {formatCurrencyToMXN(1000)} MXN
+                    {formatCurrencyToMXN(courseData.price)} MXN
                   </div>
                 </div>
               </CCol>
@@ -134,14 +142,15 @@ const Course = () => {
                   <img src={imageUrl} alt="Curso" className="h-72" />
                 </div>
                 <div className="flex flex-col gap-3">
-                  <Button variant="contained"
-                    onClick={() => { }}
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      checkout(courseData.priceId);
+                    }}
                   >
                     Comprar curso o iniciar sesion
                   </Button>
-                  <Button variant="outlined">
-                    Reseñar curso
-                  </Button>
+                  <Button variant="outlined">Reseñar curso</Button>
                 </div>
               </CCol>
             </CRow>
@@ -156,15 +165,7 @@ const Course = () => {
           </CRow>
           <CRow className="pb-3">
             <CCol className="flex justify-center">
-              <div className="text-white">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </div>
+              <div className="text-white">{courseData.summary}</div>
             </CCol>
           </CRow>
           <CRow className="pt-3 pb-3">
@@ -176,15 +177,7 @@ const Course = () => {
           </CRow>
           <CRow className="pb-10">
             <CCol className="flex justify-center">
-              <div className="text-white">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </div>
+              <div className="text-white">{courseData.target}</div>
             </CCol>
           </CRow>
           <CRow className="pb-6">

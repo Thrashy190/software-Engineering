@@ -138,7 +138,7 @@ const Landing = () => {
             en Unity y consigan un lugar en la industria de desarrollo.
           </p>
         </div>
-        <CContainer>
+        {/* <CContainer>
           <CRow className="flex justify-center">
             {dummmyData.map((courseData) => (
               <CCol className="pb-6" xs={3}>
@@ -150,7 +150,7 @@ const Landing = () => {
               </CCol>
             ))}
           </CRow>
-        </CContainer>
+        </CContainer> */}
 
         <div style={{ textAlign: "center" }}>
           <p

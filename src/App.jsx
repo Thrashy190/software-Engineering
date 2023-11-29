@@ -33,7 +33,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="recover-password" element={<RecoverPassword />} />
-          <Route path="course" element={<Course />} />
+          <Route path="course/:id" element={<Course />} />
           <Route path="courses" element={<CourseList />} />
           <Route element={<ProtectedRoute />}>
             <Route path="review" element={<Review />} />

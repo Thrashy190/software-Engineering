@@ -31,14 +31,15 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setCurrentUser(null);
+    localStorage.removeItem("user");
     navigate("/");
   };
 
   const login = async (user) => {
-    console;
     signInWithEmailAndPassword(auth, user.email, user.password)
       .then(async (userCredential) => {
         setCurrentUser(userCredential.user);
+        localStorage.setItem("user", JSON.stringify(userCredential.user));
         await getDoc(doc(db, "users", userCredential.user.uid)).then((doc) => {
           if (doc.exists()) {
             if (doc.data().role === "admin") {

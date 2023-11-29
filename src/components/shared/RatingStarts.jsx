@@ -17,7 +17,7 @@ const RatingStars = ({ rating, totalReviews, fontColor }) => {
     <div className="flex flex-row gap-2" style={{ color: fontColor }}>
       <div>{renderStars()}</div>
       <div>
-        <span className="font-bold">{rating}</span>
+        <span className="font-bold">5</span>
       </div>
       <div>
         <span className="font-light">({totalReviews})</span>

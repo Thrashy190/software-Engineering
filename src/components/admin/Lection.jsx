@@ -4,8 +4,43 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CContainer, CRow, CCol } from "@coreui/react";
 import { TextField, Button } from "@mui/material";
 
-const Leccion = ({ leccion, index, eliminarLeccion }) => {
+const Leccion = ({
+  leccion,
+  lecciones,
+  setLecciones,
+  index,
+  indexModule,
+  eliminarLeccion,
+  modulos,
+  setModulos,
+}) => {
   const [expandedModule, setExpandedModule] = useState(null);
+  const [data, setData] = useState({
+    tipo: leccion.name,
+    summary: "",
+    title: "",
+  });
+
+  const updateLeccionInputsValues = (e) => {
+    console.log(e.target.value);
+    const newLecciones = [...lecciones];
+    if (e.target.name === "title") {
+      newLecciones[index].title = e.target.value;
+      setData({ ...data, title: e.target.value });
+    }
+    if (e.target.name === "summary") {
+      newLecciones[index].summary = e.target.value;
+      setData({ ...data, summary: e.target.value });
+    }
+    setLecciones(newLecciones);
+    updateModuleLeccion(e, index);
+  };
+
+  const updateModuleLeccion = (e) => {
+    const newModules = [...modulos];
+    newModules[indexModule].leccion = lecciones;
+    setModulos(newModules);
+  };
 
   const toggleModule = (index) => {
     setExpandedModule((prev) => (prev === index ? null : index));
@@ -53,15 +88,19 @@ const Leccion = ({ leccion, index, eliminarLeccion }) => {
           <CRow className="pt-4">
             <CCol>
               <TextField
+                onChange={updateLeccionInputsValues}
+                value={data.title}
                 fullWidth
-                name="summary"
-                placeholder="Resumen del curso"
+                name="title"
+                placeholder="Titulo"
               />
             </CCol>
           </CRow>
           <CRow className="pt-4">
             <CCol>
               <TextField
+                onChange={updateLeccionInputsValues}
+                value={data.summary}
                 fullWidth
                 name="summary"
                 multiline
