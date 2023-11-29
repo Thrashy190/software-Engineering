@@ -10,7 +10,7 @@ import DifficultyIcon from "../../components/shared/DifficultyIcon";
 import { formatCurrencyToMXN } from "../../utils/formatter";
 import ModuleList from "../../components/course/ModuleList";
 import CircularProgress from "@mui/material/CircularProgress";
-import { checkout } from "../../stripe/stripe";
+import { checkout, createProduct } from "../../stripe/stripe";
 
 const Course = () => {
   const [imageUrl, setImageUrl] = useState(null);
@@ -135,10 +135,7 @@ const Course = () => {
                 </div>
                 <div className="flex flex-col gap-3">
                   <Button variant="contained"
-                    onClick={() => {
-                      const priceId = 'price_1OCVnyERvGDcn810H1SOSDk7'
-                      checkout(priceId)
-                    }}
+                    onClick={() => { }}
                   >
                     Comprar curso o iniciar sesion
                   </Button>

@@ -1,9 +1,17 @@
 const backendPort = 3001
 const baseUrl = `http://localhost:${backendPort}`
 
-export const checkout = async (priceId) => {
+/**
+ * Create a checkout session with stripe
+ * @param {string} priceId Id of the price
+ * @param {string} successUrl Url to redirect to on success
+ * @param {string} cancelUrl Url to redirect to on cancel
+ */
+export const checkout = async (priceId, successUrl, cancelUrl) => {
     const data = {
-        priceId: priceId
+        priceId: priceId,
+        successUrl: successUrl,
+        cancelUrl: cancelUrl
     }
 
     const dataJson = JSON.stringify(data)
@@ -21,11 +29,18 @@ export const checkout = async (priceId) => {
     window.location.href = body.url
 }
 
-export const createProduct = async (courseName, description, price) => {
+/**
+ * Create a product in stripe
+ * @param {string} courseName Name of the course
+ * @param {string} desc Description of the course
+ * @param {number} p Price of the course
+ * @returns {string} id of the product
+ */
+export const createProduct = async (courseName, desc, p) => {
     const data = {
-        courseName: courseName,
-        description: description,
-        price: price
+        name: courseName,
+        description: desc,
+        price: p
     }
 
     const dataJson = JSON.stringify(data)
@@ -37,6 +52,8 @@ export const createProduct = async (courseName, description, price) => {
         },
         body: dataJson,
     })
-    
-    return response.status === 200
+
+    const { id } = await response.json()
+
+    return id
 }
