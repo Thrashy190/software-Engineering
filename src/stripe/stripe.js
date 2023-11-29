@@ -1,5 +1,5 @@
 const backendPort = 3001
-const frontendPort = 5173
+const frontendPort = 5174
 const baseUrl = `http://localhost`
 
 /**

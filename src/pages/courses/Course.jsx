@@ -13,10 +13,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { checkout } from "../../stripe/stripe";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  getDocument,
   getSingleCourseWithSubcollections,
+  getDocumentsByUids,
 } from "../../firebase/firestore";
-import { getDocument } from "../../firebase/firestore";
 import { useAuth } from "../../context/AuthContext";
 
 const Course = () => {

@@ -175,3 +175,21 @@ export const getSingleCourseWithSubcollections = async (collectionName, courseId
         modules: modulosData
     };
 };
+
+export const getDocumentsByUids = async (collectionName, uids) => {
+    const documentsData = [];
+
+    for (const uid of uids) {
+        const documentRef = doc(db, collectionName, uid);
+        const documentSnapshot = await getDoc(documentRef);
+
+        if (documentSnapshot.exists()) {
+            documentsData.push({
+                ...documentSnapshot.data(),
+                id: documentSnapshot.id
+            });
+        }
+    }
+
+    return documentsData;
+};
