@@ -138,6 +138,7 @@ const CourseList = () => {
   ];
 
   const [courses, setcourses] = React.useState([]);
+  const [filteredCourses, setFilteredCourses] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -155,6 +156,24 @@ const CourseList = () => {
     fetchData();
   }, []);
 
+  function arrayOrderBy(array, field, order) {
+    return array.sort((e, f) => {
+      const field1 = e[field];
+      const field2 = f[field];
+      
+      if (order == -1) {
+        return field1 < field2 ? 1 : field1 > field2 ? -1 : 0;
+      }
+      else {
+        return field1 < field2 ? -1 : field1 > field2 ? 1 : 0;
+      }
+    })
+  }
+
+  function search(val, order) {
+    setFilteredCourses(arrayOrderBy(courses.filter((e) => e.title.toLowerCase().includes(val.toLowerCase())), 'title', order == 'asc' ? 1 : -1));
+  }
+
   return (
     <>
       <CContainer className="pt-10">
@@ -165,10 +184,20 @@ const CourseList = () => {
             </div>
           </CCol>
         </CRow>
-        <SearchBar />
+        <SearchBar
+          search={(x, y) => search(x, y)}
+        />
         <CRow>
-          {courses.map((courseData) => (
-            <CCol className="pb-6" xs={3}>
+          {filteredCourses.length == 0 ? courses.map((courseData, index) => (
+            <CCol key={index} className="pb-6" xs={3}>
+              <CourseCard
+                courseData={courseData}
+                backgroundColor={"#764288"}
+                fontColor={"#ffffff"}
+              />
+            </CCol>
+          )) : filteredCourses.map((courseData, index) => (
+            <CCol key={index} className="pb-6" xs={3}>
               <CourseCard
                 courseData={courseData}
                 backgroundColor={"#764288"}
