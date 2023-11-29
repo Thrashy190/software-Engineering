@@ -145,7 +145,7 @@ const Course = () => {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      checkout(courseData.priceId);
+                      checkout(courseData.priceId, id);
                     }}
                   >
                     Comprar curso o iniciar sesion
