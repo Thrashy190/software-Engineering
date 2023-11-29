@@ -47,14 +47,14 @@ const Register = () => {
   };
 
   const handleCreateUser = async () => {
-    if (!check) {
-      setNotify({
-        isOpen: true,
-        message: "Debes aceptar los terminos y condiciones",
-        type: "error",
-      });
-      return;
-    }
+    // if (!check) {
+    //   setNotify({
+    //     isOpen: true,
+    //     message: "Debes aceptar los terminos y condiciones",
+    //     type: "error",
+    //   });
+    //   return;
+    // }
 
     if (user.password !== user.confirmPassword) {
       setNotify({

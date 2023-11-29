@@ -23,7 +23,7 @@ const MyCourses = () => {
         );
         setCourses(coursesdata);
         setIsLoading(false);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error("Error al traer la info", error);
       }

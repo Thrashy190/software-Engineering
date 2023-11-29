@@ -17,6 +17,8 @@ import {
   getDocumentsByUids,
 } from "../../firebase/firestore";
 import { useAuth } from "../../context/AuthContext";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
 const Course = () => {
   const { currentUser } = useAuth();
@@ -24,11 +26,13 @@ const Course = () => {
   const [courseData, setCourseData] = useState(null);
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const [hasCourse, setHasCourse] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const course = await getSingleCourseWithSubcollections("courses", id);
-        console.log(course);
         setCourseData(course);
         const url = await downloadImage(course.thumbnail);
         setImageUrl(url);
@@ -38,6 +42,18 @@ const Course = () => {
     };
 
     fetchData();
+
+    const userHasCourse = async () => {
+      const userDocRef = doc(db, "users", currentUser.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+      const coursesBought = userDocSnapshot.data()["coursesBought"];
+
+      if (coursesBought.includes(id)) {
+        setHasCourse(true);
+      }
+    }
+
+    userHasCourse();
   }, []);
 
   return (
@@ -92,8 +108,8 @@ const Course = () => {
                     {courseData.level === 1
                       ? "Básico"
                       : courseData.level === 2
-                      ? "Intermedio"
-                      : "Avanzado"}
+                        ? "Intermedio"
+                        : "Avanzado"}
                   </div>
                 </div>
 
@@ -116,8 +132,9 @@ const Course = () => {
                     onClick={() => {
                       checkout(courseData.priceId, id, currentUser.email);
                     }}
+                    disabled={hasCourse}
                   >
-                    Comprar curso o iniciar sesion
+                    {hasCourse ? "Comprado" : "Comprar curso"}
                   </Button>
                   <Button
                     variant="outlined"

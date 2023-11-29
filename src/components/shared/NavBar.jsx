@@ -20,7 +20,7 @@ const NavBar = () => {
   };
 
   useEffect(() => {
-    console.log(currentUser);
+    // console.log(currentUser);
   }, []);
 
   if (

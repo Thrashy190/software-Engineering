@@ -7,7 +7,7 @@ const RatingStars = ({ rating, totalReviews, fontColor }) => {
   let sumatoria = 0;
 
   const getrating = () => {
-    console.log(rating);
+    // console.log(rating);
     if (!rating) {
       return 0;
     }
@@ -23,7 +23,7 @@ const RatingStars = ({ rating, totalReviews, fontColor }) => {
   const filledStars = Math.round(ratingData);
 
   const renderStars = () => {
-    console.log(rating);
+    // console.log(rating);
     return Array.from({ length: MAX_STARS }, (_, index) => (
       <span key={index}>
         {index < filledStars ? <StarIcon /> : <StarBorderIcon />}
