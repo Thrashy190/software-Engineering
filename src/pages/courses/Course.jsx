@@ -23,6 +23,7 @@ const Course = () => {
     const fetchData = async () => {
       try {
         const course = await getDocument("courses", id);
+        console.log(course);
         setCourseData(course);
         const url = await downloadImage(course.thumbnail);
         setImageUrl(url);
@@ -105,17 +106,18 @@ const Course = () => {
                 <div className="text-[#FAD264] font-light">
                   By Jorge Ferrétiz González
                 </div>
-                <div className="text-white ">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation
-                </div>
+                <div className="text-white ">{courseData.description}</div>
                 <div className="flex flex-row items-center gap-3">
                   <div>
-                    <DifficultyIcon level={3} />
+                    <DifficultyIcon level={courseData.level} />
                   </div>
                   <div className="text-[#FAD264] font-bold text-lg">
-                    Nivel: Avanzado
+                    Nivel:{" "}
+                    {courseData.level === 1
+                      ? "Básico"
+                      : courseData.level === 2
+                      ? "Intermedio"
+                      : "Avanzado"}
                   </div>
                 </div>
                 <div className="flex flex-row items-center gap-3">
@@ -131,7 +133,7 @@ const Course = () => {
                     <AttachMoneyIcon fontSize="large" />
                   </div>
                   <div className="text-[#FAD264] font-bold text-lg">
-                    {formatCurrencyToMXN(1000)} MXN
+                    {formatCurrencyToMXN(courseData.price)} MXN
                   </div>
                 </div>
               </CCol>
@@ -143,8 +145,7 @@ const Course = () => {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      const priceId = "price_1OCVnyERvGDcn810H1SOSDk7";
-                      checkout(priceId);
+                      checkout(courseData.priceId);
                     }}
                   >
                     Comprar curso o iniciar sesion
@@ -164,15 +165,7 @@ const Course = () => {
           </CRow>
           <CRow className="pb-3">
             <CCol className="flex justify-center">
-              <div className="text-white">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </div>
+              <div className="text-white">{courseData.summary}</div>
             </CCol>
           </CRow>
           <CRow className="pt-3 pb-3">
@@ -184,15 +177,7 @@ const Course = () => {
           </CRow>
           <CRow className="pb-10">
             <CCol className="flex justify-center">
-              <div className="text-white">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </div>
+              <div className="text-white">{courseData.target}</div>
             </CCol>
           </CRow>
           <CRow className="pb-6">

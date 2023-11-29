@@ -7,11 +7,11 @@ const baseUrl = `http://localhost:${backendPort}`
  * @param {string} successUrl Url to redirect to on success
  * @param {string} cancelUrl Url to redirect to on cancel
  */
-export const checkout = async (priceId, successUrl, cancelUrl) => {
+export const checkout = async (priceId) => {
     const data = {
         priceId: priceId,
-        successUrl: successUrl,
-        cancelUrl: cancelUrl
+        successUrl: "localhost:5174/mycourses",
+        cancelUrl: "localhost:5174/courses"
     }
 
     const dataJson = JSON.stringify(data)
