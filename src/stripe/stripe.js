@@ -8,11 +8,12 @@ const baseUrl = `http://localhost`
  * @param {string} successUrl Url to redirect to on success
  * @param {string} cancelUrl Url to redirect to on cancel
  */
-export const checkout = async (priceId, courseId) => {
+export const checkout = async (priceId, courseId, email) => {
     const data = {
         priceId: priceId,
+        customerEmail: email,
         successUrl: `${baseUrl}:${frontendPort}/mycourses`,
-        cancelUrl: `${baseUrl}:${frontendPort}/course/${courseId}`
+        cancelUrl: `${baseUrl}:${frontendPort}/course/${courseId}`,
     }
 
     const dataJson = JSON.stringify(data)

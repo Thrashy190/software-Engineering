@@ -13,8 +13,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { checkout } from "../../stripe/stripe";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDocument } from "../../firebase/firestore";
+import { useAuth } from "../../context/AuthContext";
 
 const Course = () => {
+  const { currentUser } = useAuth();
   const [imageUrl, setImageUrl] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ const Course = () => {
     const fetchData = async () => {
       try {
         const course = await getDocument("courses", id);
-        console.log(course);
+        // console.log(course);
         setCourseData(course);
         const url = await downloadImage(course.thumbnail);
         setImageUrl(url);
@@ -145,7 +147,7 @@ const Course = () => {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      checkout(courseData.priceId, id);
+                      checkout(courseData.priceId, id, currentUser.email);
                     }}
                   >
                     Comprar curso o iniciar sesion
