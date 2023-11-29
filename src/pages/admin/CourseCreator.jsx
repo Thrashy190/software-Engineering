@@ -49,13 +49,12 @@ const CourseCreator = () => {
   });
 
   const agregarModulo = () => {
-    setModulos([...modulos, {}]);
+    setModulos([...modulos, {id: new Date().getTime()}]);
   };
 
-  const eliminarModulo = (name) => {
+  const eliminarModulo = (index) => {
     const nuevosModulos = [...modulos];
-    let indiceABorrar = nuevosModulos.findIndex((block) => name === block.name);
-    nuevosModulos.splice(indiceABorrar, 1);
+    nuevosModulos.splice(index, 1);
     setModulos(nuevosModulos);
   };
 
@@ -241,9 +240,10 @@ const CourseCreator = () => {
         <div className="py-4">
           {modulos.map((modulo, index) => (
             <Modulo
-              key={index}
+              key={modulo.id}
               index={index}
-              eliminarModulo={eliminarModulo}
+              modulo={modulo}
+              eliminarModulo={() => eliminarModulo(index)}
               modulos={modulos}
               setModulos={setModulos}
             />

@@ -7,7 +7,7 @@ import Leccion from "./Lection";
 import { Button } from "@mui/material";
 import { CContainer, CRow, CCol } from "@coreui/react";
 
-const Modulo = ({ index, eliminarModulo, modulos, setModulos }) => {
+const Modulo = ({ index, modulo, eliminarModulo, modulos, setModulos }) => {
   const [lecciones, setLecciones] = useState([]);
   const [expandedModule, setExpandedModule] = useState(null);
   const [name, setName] = useState("");
@@ -35,12 +35,12 @@ const Modulo = ({ index, eliminarModulo, modulos, setModulos }) => {
 
   return (
     <div
-      key={index}
+      key={modulo.id}
       className={`rounded p-4 my-4 cursor-pointer relative  bg-[#FAD264]`}
     >
       <div
         className={`flex items-center justify-between ${
-          expandedModule === index ? "pb-3" : ""
+          expandedModule === modulo.id ? "pb-3" : ""
         }`}
       >
         <div className={`text-xl font-bold "text-black }`}>
@@ -50,18 +50,18 @@ const Modulo = ({ index, eliminarModulo, modulos, setModulos }) => {
         <div className="flex flex-row gap-4">
           <div
             className={`transition-transform transform ${
-              expandedModule === index ? "rotate-180" : ""
+              expandedModule === modulo.id ? "rotate-180" : ""
             }`}
             style={{
               color: "#000000",
             }}
-            onClick={() => toggleModule(index)}
+            onClick={() => toggleModule(modulo.id)}
           >
             <KeyboardArrowDownIcon fontSize="large" />
           </div>
         </div>
       </div>
-      {expandedModule === index && (
+      {expandedModule === modulo.id && (
         <CContainer className="flex flex-col">
           <CRow>
             <CCol>
