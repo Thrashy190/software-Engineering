@@ -1,5 +1,6 @@
 const backendPort = 3001
-const baseUrl = `http://localhost:${backendPort}`
+const frontendPort = 5173
+const baseUrl = `http://localhost`
 
 /**
  * Create a checkout session with stripe
@@ -7,16 +8,17 @@ const baseUrl = `http://localhost:${backendPort}`
  * @param {string} successUrl Url to redirect to on success
  * @param {string} cancelUrl Url to redirect to on cancel
  */
-export const checkout = async (priceId) => {
+export const checkout = async (priceId, courseId, email) => {
     const data = {
         priceId: priceId,
-        successUrl: "localhost:5174/mycourses",
-        cancelUrl: "localhost:5174/courses"
+        customerEmail: email,
+        successUrl: `${baseUrl}:${frontendPort}/mycourses`,
+        cancelUrl: `${baseUrl}:${frontendPort}/course/${courseId}`,
     }
 
     const dataJson = JSON.stringify(data)
 
-    const response = await fetch(`${baseUrl}/create-checkout-session`, {
+    const response = await fetch(`${baseUrl}:${backendPort}/create-checkout-session`, {
         method: 'POST',
         // mode: 'no-cors',
         headers: {
@@ -25,8 +27,8 @@ export const checkout = async (priceId) => {
         body: dataJson,
     })
 
-    const body = await response.json()
-    window.location.href = body.url
+    const { url } = await response.json()
+    window.location.href = url
 }
 
 /**

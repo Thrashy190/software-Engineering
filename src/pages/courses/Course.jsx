@@ -16,8 +16,11 @@ import {
   getDocument,
   getSingleCourseWithSubcollections,
 } from "../../firebase/firestore";
+import { getDocument } from "../../firebase/firestore";
+import { useAuth } from "../../context/AuthContext";
 
 const Course = () => {
+  const { currentUser } = useAuth();
   const [imageUrl, setImageUrl] = useState(null);
   const [courseData, setCourseData] = useState(null);
   const navigate = useNavigate();
@@ -112,7 +115,7 @@ const Course = () => {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      checkout(courseData.priceId);
+                      checkout(courseData.priceId, id, currentUser.email);
                     }}
                   >
                     Comprar curso o iniciar sesion
