@@ -82,14 +82,14 @@ export const getCollectionWithSubcollections = async (collectionName) => {
 
     for (const doc of collectionSnapshot.docs) {
         const docData = doc.data();
-        const modulosCollectionRef = collection(doc.ref, 'modulos');
+        const modulosCollectionRef = collection(doc.ref, 'modules');
         const modulosSnapshot = await getDocs(modulosCollectionRef);
 
         const modulosData = [];
 
         for (const moduloDoc of modulosSnapshot.docs) {
             const moduloData = moduloDoc.data();
-            const leccionesCollectionRef = collection(moduloDoc.ref, 'lecciones');
+            const leccionesCollectionRef = collection(moduloDoc.ref, 'lessons');
             const leccionesSnapshot = await getDocs(leccionesCollectionRef);
 
             const leccionesData = leccionesSnapshot.docs.map(leccionDoc => ({
@@ -100,14 +100,14 @@ export const getCollectionWithSubcollections = async (collectionName) => {
             modulosData.push({
                 ...moduloData,
                 id: moduloDoc.id,
-                lecciones: leccionesData
+                lessons: leccionesData
             });
         }
 
         collectionData.push({
             ...docData,
             id: doc.id,
-            modulos: modulosData
+            modules: modulosData
         });
     }
 
@@ -134,4 +134,44 @@ export const updateDocumentWithSubcollections = async (collectionName, documentI
     }
 
     return true; // o cualquier otro valor que desees devolver
+};
+
+export const getSingleCourseWithSubcollections = async (collectionName, courseId) => {
+    const courseRef = doc(db, collectionName, courseId);
+    const courseDoc = await getDoc(courseRef);
+
+    if (!courseDoc.exists()) {
+        throw new Error('Curso no encontrado'); // Puedes manejar esto de acuerdo a tus necesidades
+    }
+
+    const courseData = courseDoc.data();
+
+    const modulosCollectionRef = collection(courseRef, 'modules');
+    const modulosSnapshot = await getDocs(modulosCollectionRef);
+
+    const modulosData = [];
+
+    for (const moduloDoc of modulosSnapshot.docs) {
+        const moduloData = moduloDoc.data();
+
+        const leccionesCollectionRef = collection(moduloDoc.ref, 'lessons');
+        const leccionesSnapshot = await getDocs(leccionesCollectionRef);
+
+        const leccionesData = leccionesSnapshot.docs.map(leccionDoc => ({
+            ...leccionDoc.data(),
+            id: leccionDoc.id
+        }));
+
+        modulosData.push({
+            ...moduloData,
+            id: moduloDoc.id,
+            lessons: leccionesData
+        });
+    }
+
+    return {
+        ...courseData,
+        id: courseDoc.id,
+        modules: modulosData
+    };
 };

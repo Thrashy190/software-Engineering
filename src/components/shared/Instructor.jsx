@@ -16,9 +16,8 @@ const Instructor = () => {
         <CCol className="flex flex-col justify-center gap-3">
           <div className="text-[#FAD264] text-2xl">Jorge Ferrétiz González</div>
           <div className="text-white">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation
+            Ilustrador y desarrollador de videojuegos profesional. Experto en
+            Unity y C#. Desarrollador de Eagle Knigth Paradox.
           </div>
         </CCol>
       </CRow>

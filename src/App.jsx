@@ -38,7 +38,10 @@ function App() {
           <Route path="courses" element={<CourseList />} />
           <Route element={<ProtectedRoute />}>
             <Route path="review/:id" element={<Review />} />
-            <Route path="lection" element={<Lection />} />
+            <Route
+              path="lection/:id/:moduleindex/:lessonindex"
+              element={<Lection />}
+            />
             <Route path="mycourses" element={<MyCourses />} />
             <Route path="profile" element={<ProfileUser />} />
           </Route>

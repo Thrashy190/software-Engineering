@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CContainer, CRow, CCol } from "@coreui/react";
 import { TextField, Button } from "@mui/material";
+import { uploadFiles } from "../../firebase/storage";
+import { async } from "@firebase/util";
 
 const Leccion = ({
   leccion,
@@ -19,11 +21,27 @@ const Leccion = ({
     tipo: leccion.name,
     summary: "",
     title: "",
+    video: "",
+    extra: "",
   });
 
-  const updateLeccionInputsValues = (e) => {
-    console.log(e.target.value);
+  const updateLeccionInputsValues = async (e) => {
     const newLecciones = [...lecciones];
+
+    if (e.target.name === "video") {
+      await uploadFiles(e.target.files[0], "video").then((url) => {
+        console.log(url);
+        newLecciones[index].video = url.fullPath;
+      });
+    }
+
+    if (e.target.name === "extra") {
+      await uploadFiles(e.target.files[0], "extra").then((url) => {
+        console.log(url);
+        newLecciones[index].extra = url.fullPath;
+      });
+    }
+
     if (e.target.name === "title") {
       newLecciones[index].title = e.target.value;
       setData({ ...data, title: e.target.value });
@@ -32,6 +50,7 @@ const Leccion = ({
       newLecciones[index].summary = e.target.value;
       setData({ ...data, summary: e.target.value });
     }
+    console.log("despues");
     setLecciones(newLecciones);
     updateModuleLeccion();
   };
@@ -81,7 +100,12 @@ const Leccion = ({
           {leccion.name === "documento" ? null : (
             <CRow className="pt-4">
               <CCol>
-                <input type="file" />
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={updateLeccionInputsValues}
+                  name="video"
+                />
               </CCol>
             </CRow>
           )}
@@ -107,11 +131,6 @@ const Leccion = ({
                 rows={10}
                 placeholder="Resumen del curso"
               />
-            </CCol>
-          </CRow>
-          <CRow className="pt-4">
-            <CCol>
-              <input type="file" />
             </CCol>
           </CRow>
         </CContainer>

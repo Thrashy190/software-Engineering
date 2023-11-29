@@ -12,7 +12,10 @@ import ModuleList from "../../components/course/ModuleList";
 import CircularProgress from "@mui/material/CircularProgress";
 import { checkout } from "../../stripe/stripe";
 import { useParams, useNavigate } from "react-router-dom";
-import { getDocument } from "../../firebase/firestore";
+import {
+  getDocument,
+  getSingleCourseWithSubcollections,
+} from "../../firebase/firestore";
 
 const Course = () => {
   const [imageUrl, setImageUrl] = useState(null);
@@ -22,7 +25,7 @@ const Course = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const course = await getDocument("courses", id);
+        const course = await getSingleCourseWithSubcollections("courses", id);
         console.log(course);
         setCourseData(course);
         const url = await downloadImage(course.thumbnail);
@@ -34,35 +37,6 @@ const Course = () => {
 
     fetchData();
   }, []);
-
-  const modules = [
-    {
-      title: "Módulo 1",
-      duration: "2h",
-      lessons: [
-        { type: "Video", title: "Lección 1", duration: "30m" },
-        { type: "Texto", title: "Lección 2" },
-      ],
-    },
-    {
-      title: "Módulo 2",
-      duration: "1.5h",
-      lessons: [
-        { type: "Video", title: "Lección 1", duration: "45m" },
-        { type: "Texto", title: "Lección 2" },
-        { type: "Video", title: "Lección 3", duration: "15m" },
-      ],
-    },
-    {
-      title: "Módulo 3",
-      duration: "1.5h",
-      lessons: [
-        { type: "Video", title: "Lección 1", duration: "45m" },
-        { type: "Texto", title: "Lección 2" },
-        { type: "Examen", title: "Lección 3", duration: "15m" },
-      ],
-    },
-  ];
 
   return (
     <div
@@ -95,8 +69,8 @@ const Course = () => {
               <CCol className="flex flex-col justify-center gap-3">
                 <div>
                   <RatingStars
-                    rating={4}
-                    totalReviews={10}
+                    rating={courseData.reviews}
+                    totalReviews={courseData.reviews.length}
                     fontColor={"#FAD264"}
                   />
                 </div>
@@ -120,14 +94,7 @@ const Course = () => {
                       : "Avanzado"}
                   </div>
                 </div>
-                <div className="flex flex-row items-center gap-3">
-                  <div style={{ color: "#FAD264" }}>
-                    <AccessTimeIcon fontSize="large" />
-                  </div>
-                  <div className="text-[#FAD264] font-bold text-lg">
-                    3 Horas de contenido
-                  </div>
-                </div>
+
                 <div className="flex flex-row items-center gap-3">
                   <div style={{ color: "#FAD264" }}>
                     <AttachMoneyIcon fontSize="large" />
@@ -194,7 +161,7 @@ const Course = () => {
           </CRow>
           <CRow className="pb-6">
             <CCol className="flex justify-center">
-              <ModuleList modules={modules}></ModuleList>
+              <ModuleList modules={courseData.modules} id={id}></ModuleList>
             </CCol>
           </CRow>
           <Instructor />

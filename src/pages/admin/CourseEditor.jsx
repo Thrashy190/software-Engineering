@@ -1,15 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import SaveCourse from "./SaveCourse.jsx";
-import {getCollection, getDocument} from "../../firebase/firestore.js";
+import { getCollection, getDocument } from "../../firebase/firestore.js";
 
 const CourseEditor = () => {
-  const {courseId} = useParams();
+  const { courseId } = useParams();
   const [course, setCourse] = useState(undefined);
 
   const fetchData = async () => {
     try {
       const course = await getDocument("courses", courseId);
+      console.log("course", course);
       course.modules = await getCollection(`courses/${courseId}/modules`);
       setCourse(course);
     } catch (error) {
@@ -22,18 +23,15 @@ const CourseEditor = () => {
   }, []);
   return (
     <>
-      {
-        course && (
-          <SaveCourse
-            courseId={courseId}
-            courseParams={course}
-            existingModules={course.modules}
-          />
-        )
-      }
+      {course && (
+        <SaveCourse
+          courseId={courseId}
+          courseParams={course}
+          existingModules={course.modules}
+        />
+      )}
     </>
   );
-}
-
+};
 
 export default CourseEditor;

@@ -7,7 +7,7 @@ import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
 import ArticleIcon from "@mui/icons-material/Article";
 import QuizIcon from "@mui/icons-material/Quiz";
 
-const ModuleList = ({ modules }) => {
+const ModuleList = ({ modules, id }) => {
   const navigate = useNavigate();
 
   const [expandedModule, setExpandedModule] = useState(null);
@@ -37,16 +37,9 @@ const ModuleList = ({ modules }) => {
                 expandedModule === index ? "text-[#FAD264] " : "text-black "
               }`}
             >
-              {module.title}
+              {module.name}
             </div>
             <div className="flex flex-row gap-4">
-              <div
-                className={`pt-1 text-xl font-bold ${
-                  expandedModule === index ? "text-[#FAD264] " : "text-black "
-                }`}
-              >
-                {module.duration}
-              </div>
               <div
                 className={`transition-transform transform ${
                   expandedModule === index ? "rotate-180" : ""
@@ -67,20 +60,19 @@ const ModuleList = ({ modules }) => {
                   <div className="flex flex-row gap-4">
                     <div
                       className="text-white text-xl font-bold "
-                      onClick={() => navigate("/lection")}
+                      onClick={() =>
+                        navigate(`/lection/${id}/${index}/${lessonIndex}`)
+                      }
                     >
                       {lesson.title}
                     </div>
-                    {lesson.type === "Video" ? (
+                    {lesson.name === "video" ? (
                       <OndemandVideoIcon fontSize="large" color="primary" />
-                    ) : lesson.type === "Texto" ? (
+                    ) : lesson.name === "documento" ? (
                       <ArticleIcon fontSize="large" color="primary" />
                     ) : (
                       <QuizIcon fontSize="large" color="primary" />
                     )}
-                  </div>
-                  <div className="text-white text-xl font-bold ">
-                    {lesson.duration}
                   </div>
                 </div>
               ))}

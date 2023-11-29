@@ -36,7 +36,6 @@ const marks = [
 
 const SaveCourse = (props) => {
   const { courseParams, existingModules, courseId } = props;
-  console.log(courseParams);
   const isNew = !courseParams;
   const navigate = useNavigate();
 
@@ -116,7 +115,6 @@ const SaveCourse = (props) => {
     await uploadFiles(file, "miniaturas").then(async (response) => {
       const { title, summary, level, price, description, target } = data;
       const stripeId = await createProduct(title, description, price);
-      console.log(stripeId);
       const course = {
         title,
         summary,
@@ -130,21 +128,25 @@ const SaveCourse = (props) => {
         reviews: [],
         thumbnail: response.fullPath,
       };
-      await createCourse("courses", course, modulos).then((response) => {
-        console.log(response);
-        setNotify({
-          isOpen: true,
-          message: "Curso guardado con exito",
-          type: "success",
+      await createCourse("courses", course, modulos)
+        .then((response) => {
+          console.log(response);
+          setNotify({
+            isOpen: true,
+            message: "Curso guardado con exito",
+            type: "success",
+          });
+        })
+        .then(() => {
+          navigate("/admin/courses");
         });
-        navigate("/admin/courses");
-      });
     });
   };
 
   const updateAndPublish = async () => {
-    const { title, summary, level, price, description, target } = data;
-    const course = {
+    const { title, summary, level, price, description, target, priceId } = data;
+
+    let course = {
       title,
       summary,
       level,
@@ -154,8 +156,33 @@ const SaveCourse = (props) => {
       updatedAt: new Date(),
     };
 
-    updateDocument("courses", courseId, course);
-    navigate("/admin/courses");
+    if (!priceId) {
+      const stripeId = await createProduct(title, description, price);
+      course = {
+        title,
+        summary,
+        priceId: stripeId,
+        level,
+        price,
+        description,
+        target,
+        status: "published",
+        updatedAt: new Date(),
+      };
+    }
+
+    await updateDocument("courses", courseId, course)
+      .then((response) => {
+        console.log(response);
+        setNotify({
+          isOpen: true,
+          message: "Curso actualizado con exito",
+          type: "success",
+        });
+      })
+      .then(() => {
+        navigate("/admin/courses");
+      });
   };
 
   return (
@@ -230,6 +257,20 @@ const SaveCourse = (props) => {
                 />
               </CCol>
             </CRow>
+            {!isNew && (
+              <CRow className="py-10">
+                <CCol>
+                  <OutlinedInput
+                    onChange={handleChange}
+                    placeholder="priceId"
+                    disabled={true}
+                    fullWidth
+                    value={data.priceId}
+                    id="outlined-adornment-amount"
+                  />
+                </CCol>
+              </CRow>
+            )}
             <CRow className="pb-5">
               <CCol className="mx-5">
                 <Slider

@@ -48,12 +48,6 @@ const _admin = [
   },
   {
     component: CNavItem,
-    name: "Pagos",
-    to: "/admin/payments",
-    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
     name: "Perfil",
     to: "/admin/profile",
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,

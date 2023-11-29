@@ -151,7 +151,7 @@ const Register = () => {
           name="confirmPassword"
           onChange={handleInputs}
         />
-        <div className="flex justify-start">
+        {/* <div className="flex justify-start">
           <FormGroup>
             <FormControlLabel
               onChange={handleCheck}
@@ -174,12 +174,11 @@ const Register = () => {
               }
             />
           </FormGroup>
-        </div>
+        </div> */}
         <Button
           fullWidth
           variant="contained"
           onClick={() => handleCreateUser()}
-          disabled={!check}
         >
           Crea tu cuenta aqui
         </Button>

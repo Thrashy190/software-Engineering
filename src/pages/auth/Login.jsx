@@ -38,7 +38,7 @@ const Login = () => {
           name="password"
           onChange={handleInputs}
         />
-        <div className="flex justify-start">
+        {/* <div className="flex justify-start">
           <Typography
             color="#f5f5f5"
             variant="text"
@@ -52,7 +52,7 @@ const Login = () => {
           >
             He olvidado mi contraseña
           </Typography>
-        </div>
+        </div> */}
         <Button fullWidth variant="contained" onClick={() => login(user)}>
           Inicia sesion aqui
         </Button>

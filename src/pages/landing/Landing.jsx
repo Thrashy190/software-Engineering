@@ -1,8 +1,10 @@
+import React from "react";
 import { CContainer, CRow, CCol } from "@coreui/react";
 import lndimg from "../../assets/lndimg.jpg";
 import instructor from "../../assets/instructor.png";
 import meta from "../../assets/meta.png";
 import CourseCard from "../../components/course/CourseCard";
+import { getCollection } from "../../firebase/firestore";
 
 const scrollToTop = () => {
   window.scrollTo({
@@ -12,32 +14,23 @@ const scrollToTop = () => {
 };
 
 const Landing = () => {
-  const dummmyData = [
-    {
-      courseName: "Curso de React",
-      courseCreator: "Juanito Pérez",
-      coursePrice: 100,
-      courseReviews: 10,
-      courseRating: 6,
-      courseThumbNail: "miniaturas/f1.jpeg",
-    },
-    {
-      courseName: "Curso de React",
-      courseCreator: "Juanito Pérez",
-      coursePrice: 100,
-      courseReviews: 10,
-      courseRating: 4,
-      courseThumbNail: "miniaturas/f1.jpeg",
-    },
-    {
-      courseName: "Curso de React",
-      courseCreator: "Juanito Pérez",
-      coursePrice: 100,
-      courseReviews: 10,
-      courseRating: 4,
-      courseThumbNail: "miniaturas/f1.jpeg",
-    },
-  ];
+  const [courses, setcourses] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getCollection("courses");
+        console.log(data);
+        setcourses(data);
+        setIsLoading(false);
+        console.log(data);
+      } catch (error) {
+        console.error("Error al traer la info", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <CContainer
@@ -61,7 +54,6 @@ const Landing = () => {
           />
         </CCol>
         <CCol>
-          {" "}
           <div
             className="italic..."
             style={{
@@ -80,7 +72,7 @@ const Landing = () => {
           </div>
         </CCol>
 
-        <div
+        {/* <div
           style={{
             display: "flex",
             alignItems: "center",
@@ -114,7 +106,7 @@ const Landing = () => {
           >
             Buscar...
           </button>
-        </div>
+        </div> */}
 
         <div style={{ textAlign: "center" }}>
           <p
@@ -138,19 +130,31 @@ const Landing = () => {
             en Unity y consigan un lugar en la industria de desarrollo.
           </p>
         </div>
-        {/* <CContainer>
+        <CContainer>
           <CRow className="flex justify-center">
-            {dummmyData.map((courseData) => (
-              <CCol className="pb-6" xs={3}>
-                <CourseCard
-                  courseData={courseData}
-                  backgroundColor={"#764288"}
-                  fontColor={"#ffffff"}
-                />
-              </CCol>
-            ))}
+            {/* <CCol className="pb-6" xs={3}>
+              <CourseCard
+                courseData={courses[0]}
+                backgroundColor={"#764288"}
+                fontColor={"#ffffff"}
+              />
+            </CCol>
+            <CCol className="pb-6" xs={3}>
+              <CourseCard
+                courseData={courses[1]}
+                backgroundColor={"#764288"}
+                fontColor={"#ffffff"}
+              />
+            </CCol>
+            <CCol className="pb-6" xs={3}>
+              <CourseCard
+                courseData={courses[2]}
+                backgroundColor={"#764288"}
+                fontColor={"#ffffff"}
+              />
+            </CCol> */}
           </CRow>
-        </CContainer> */}
+        </CContainer>
 
         <div style={{ textAlign: "center" }}>
           <p
