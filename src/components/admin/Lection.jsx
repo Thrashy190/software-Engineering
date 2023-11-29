@@ -9,7 +9,10 @@ const Leccion = ({
   lecciones,
   setLecciones,
   index,
+  indexModule,
   eliminarLeccion,
+  modulos,
+  setModulos,
 }) => {
   const [expandedModule, setExpandedModule] = useState(null);
   const [data, setData] = useState({
@@ -30,6 +33,13 @@ const Leccion = ({
       setData({ ...data, summary: e.target.value });
     }
     setLecciones(newLecciones);
+    updateModuleLeccion(e, index);
+  };
+
+  const updateModuleLeccion = (e) => {
+    const newModules = [...modulos];
+    newModules[indexModule].leccion = lecciones;
+    setModulos(newModules);
   };
 
   const toggleModule = (index) => {

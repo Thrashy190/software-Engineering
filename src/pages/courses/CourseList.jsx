@@ -3,6 +3,7 @@ import { CContainer, CRow, CCol } from "@coreui/react";
 import CourseCard from "../../components/course/CourseCard";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import SearchBar from "../../components/shared/SearchBar";
+import { getCollection } from "../../firebase/firestore";
 
 const CourseList = () => {
   const dummmyData = [
@@ -136,6 +137,24 @@ const CourseList = () => {
     },
   ];
 
+  const [courses, setcourses] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getCollection("courses");
+        setcourses(data);
+        setIsLoading(false);
+        console.log(data);
+      } catch (error) {
+        console.error("Error al traer la info", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <CContainer className="pt-10">
@@ -148,7 +167,7 @@ const CourseList = () => {
         </CRow>
         <SearchBar />
         <CRow>
-          {dummmyData.map((courseData) => (
+          {courses.map((courseData) => (
             <CCol className="pb-6" xs={3}>
               <CourseCard
                 courseData={courseData}

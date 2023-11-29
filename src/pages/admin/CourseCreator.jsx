@@ -13,6 +13,7 @@ import Modulo from "../../components/admin/Module";
 import Examen from "../../components/admin/Exam";
 import Notification from "../../components/shared/Notifications";
 import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../stripe/stripe";
 
 const marks = [
   {
@@ -100,19 +101,35 @@ const CourseCreator = () => {
     setFile(e.target.files[0]);
   };
 
-  const handlePublish = () => {
-    const { title, summary, level, price, description, target } = data;
-    const course = {
-      title,
-      summary,
-      level,
-      price,
-      description,
-      target,
-      status: "published",
-      createdAt: new Date(),
-    };
-    addDocument("courses", course);
+  const handlePublish = async () => {
+    await uploadFiles(file, "miniaturas").then(async (response) => {
+      const { title, summary, level, price, description, target } = data;
+
+      const stripeId = await createProduct(title, description, price);
+      console.log(stripeId);
+      const course = {
+        title,
+        summary,
+        level,
+        price,
+        priceId: stripeId,
+        description,
+        target,
+        status: "published",
+        createdAt: new Date(),
+        reviews: [],
+        thumbnail: response.fullPath,
+      };
+      await createCourse("courses", course).then((response) => {
+        console.log(response);
+        setNotify({
+          isOpen: true,
+          message: "Curso guardado con exito",
+          type: "success",
+        });
+        navigate("/admin/courses");
+      });
+    });
   };
 
   return (
@@ -127,7 +144,7 @@ const CourseCreator = () => {
           <CCol className="flex justify-end">
             <div className="flex gap-4">
               <Button variant="contained" onClick={handlePublish}>
-                Crear curso
+                Publicar curso
               </Button>
               <Button variant="contained" onClick={handleSave}>
                 Guardar curso
@@ -173,6 +190,7 @@ const CourseCreator = () => {
             <CRow className="py-10">
               <CCol>
                 <OutlinedInput
+                  maxLength={4}
                   onChange={handleChange}
                   placeholder="Precio"
                   fullWidth
@@ -258,7 +276,7 @@ const CourseCreator = () => {
           <CCol className="flex justify-end">
             <div className="flex gap-4">
               <Button variant="contained" onClick={handlePublish}>
-                Crear curso
+                Publicar curso
               </Button>
               <Button variant="contained" onClick={handleSave}>
                 Guardar curso
