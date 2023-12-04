@@ -63,11 +63,60 @@ export const addDocument = async (collectionName, document) => {
     return documentRef;
 };
 
-export const updateDocument = async (collectionName, documentId, document) => {
+export const updateDocument = async (collectionName, documentId, document, modules,lecciones) => {
+    console.log(document)
     const documentRef = doc(db, collectionName, documentId);
     const documentUpdated = await updateDoc(documentRef, document);
+    //Update subcollections (modules and lessons)
+    if (modules) {
+        for (const modulo of modules) {
+
+            const moduloRef = doc(db, `${collectionName}/${documentId}/modules`, modulo.id);
+            const moduloSnapshot = await getDoc(moduloRef);
+
+            if (moduloSnapshot.exists()) {
+                // Modulo exists, update it
+                await updateDoc(moduloRef, modulo);
+
+                if (lecciones) {
+                    for (const leccion of lecciones) {
+                        const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
+                        const leccionSnapshot = await getDoc(leccionRef);
+                        if (leccionSnapshot.exists()) {
+                            // Lesson exists, update it
+                            await updateDoc(leccionRef, leccion);
+                        } else {
+                            // Lesson does not exist, create it
+                            await addDoc(collection(leccionRef.parent), leccion);
+                        }
+                    }
+                }
+
+            } else {
+                // Modulo does not exist, create it
+                await addDoc(collection(moduloRef.parent), modulo);
+
+                if (modulo.lecciones) {
+                    for (const leccion of modulo.lecciones) {
+                        const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
+                        const leccionSnapshot = await getDoc(leccionRef);
+                        if (leccionSnapshot.exists()) {
+                            // Lesson exists, update it
+                            await updateDoc(leccionRef, leccion);
+                        } else {
+                            // Lesson does not exist, create it
+                            await addDoc(collection(leccionRef.parent), leccion);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
     return documentUpdated;
 };
+
+
 
 export const deleteDocument = async (collectionName, documentId) => {
     const documentRef = doc(db, collectionName, documentId);

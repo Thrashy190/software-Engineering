@@ -51,7 +51,7 @@ const Course = () => {
       if (coursesBought.includes(id)) {
         setHasCourse(true);
       }
-    }
+    };
 
     userHasCourse();
   }, []);
@@ -65,18 +65,6 @@ const Course = () => {
     >
       {imageUrl ? (
         <CContainer className="pt-10">
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              width: "100%",
-              height: "400px",
-              backgroundImage: `url(${imageUrl})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "blur(10px)", // Ajusta el valor de desenfoque según tus preferencias
-            }}
-          />
           <div
             style={{
               position: "relative",
@@ -108,8 +96,8 @@ const Course = () => {
                     {courseData.level === 1
                       ? "Básico"
                       : courseData.level === 2
-                        ? "Intermedio"
-                        : "Avanzado"}
+                      ? "Intermedio"
+                      : "Avanzado"}
                   </div>
                 </div>
 

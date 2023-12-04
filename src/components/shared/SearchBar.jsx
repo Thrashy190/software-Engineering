@@ -5,8 +5,8 @@ import CustomSelect from "../custom/CustomSelect";
 import CustomTextField from "../custom/CustomTextField";
 
 const SearchBar = ({ search }) => {
-  const [searchValue, setSearchValue] = React.useState('');
-  const [orderBy, setOrderBy] = React.useState('desc');
+  const [searchValue, setSearchValue] = React.useState("");
+  const [orderBy, setOrderBy] = React.useState("desc");
 
   function doSearch() {
     search(searchValue, orderBy);
@@ -17,7 +17,8 @@ const SearchBar = ({ search }) => {
       <CRow>
         <CCol className="pb-6" xs={6}>
           <div>
-            <CustomTextField value={searchValue} 
+            <CustomTextField
+              value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               label="Buscar Cualquier cosa...."
             />
@@ -26,7 +27,7 @@ const SearchBar = ({ search }) => {
         <CCol className="pb-6" xs={3}>
           <div>
             <CustomSelect
-              value={orderBy}  
+              value={orderBy}
               onChange={(e) => setOrderBy(e.target.value)}
               label="Orden"
             >

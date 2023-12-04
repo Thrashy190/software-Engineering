@@ -17,13 +17,14 @@ const Leccion = ({
   setModulos,
 }) => {
   const [expandedModule, setExpandedModule] = useState(null);
-  const [data, setData] = useState({
-    tipo: leccion.name,
-    summary: "",
-    title: "",
-    video: "",
-    extra: "",
-  });
+  const [data, setData] = useState(
+    leccion ?? {
+      tipo: leccion.name,
+      summary: "",
+      title: "",
+      video: "",
+    }
+  );
 
   const updateLeccionInputsValues = async (e) => {
     const newLecciones = [...lecciones];

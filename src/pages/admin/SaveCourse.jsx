@@ -55,7 +55,7 @@ const SaveCourse = (props) => {
     target: "",
   };
   const [data, setData] = React.useState(courseParams ?? initialData);
-
+  const [lecciones, setLecciones] = useState([]);
   const agregarModulo = () => {
     setModulos([...modulos, { id: new Date().getTime() }]);
   };
@@ -153,6 +153,7 @@ const SaveCourse = (props) => {
       price,
       description,
       target,
+      status: "published",
       updatedAt: new Date(),
     };
 
@@ -171,7 +172,7 @@ const SaveCourse = (props) => {
       };
     }
 
-    await updateDocument("courses", courseId, course)
+    await updateDocument("courses", courseId, course, modulos, lecciones)
       .then((response) => {
         console.log(response);
         setNotify({
@@ -331,6 +332,9 @@ const SaveCourse = (props) => {
               eliminarModulo={() => eliminarModulo(index)}
               modulos={modulos}
               setModulos={setModulos}
+              courseId={courseId}
+              setLecciones={setLecciones}
+              lecciones={lecciones}
             />
           ))}
           <Button variant="contained" className="mt-4" onClick={agregarModulo}>
