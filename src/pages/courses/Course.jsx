@@ -127,6 +127,7 @@ const Course = () => {
                   </Button>
                   <Button
                     variant="outlined"
+                    disabled={!hasCourse}
                     onClick={() => navigate(`/review/${id}`)}
                   >
                     Reseñar curso
