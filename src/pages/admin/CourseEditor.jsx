@@ -11,7 +11,6 @@ const CourseEditor = () => {
   const fetchData = async () => {
     try {
       const course = await getDocument("courses", courseId);
-      console.log(course);
       course.modules = await getCollection(`courses/${courseId}/modules`);
 
       // get lecciones

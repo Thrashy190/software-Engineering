@@ -8,13 +8,13 @@ import { async } from "@firebase/util";
 
 const Leccion = ({
   leccion,
-  lecciones,
-  setLecciones,
   index,
   indexModule,
   eliminarLeccion,
   modulos,
   setModulos,
+  lecciones,
+  setLecciones,
 }) => {
   const [expandedModule, setExpandedModule] = useState(null);
   const [data, setData] = useState(

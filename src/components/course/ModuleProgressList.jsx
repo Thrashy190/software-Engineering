@@ -58,9 +58,10 @@ const ModuleProgressList = ({ modules, id }) => {
                   <div className="flex flex-row gap-4">
                     <div
                       className="text-white text-xl font-bold"
-                      onClick={() =>
-                        navigate(`/lection/${id}/${index}/${lessonIndex}`)
-                      }
+                      onClick={() => {
+                        navigate(`/lection/${id}/${index}/${lessonIndex}`);
+                        window.location.reload(false);
+                      }}
                     >
                       {lesson.title}
                     </div>

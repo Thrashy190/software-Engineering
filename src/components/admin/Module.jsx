@@ -15,9 +15,8 @@ const Modulo = ({
   modulos,
   setModulos,
   courseId,
-  lecciones,
-  setLecciones,
 }) => {
+  const [lecciones, setLecciones] = useState([]);
   const [expandedModule, setExpandedModule] = useState(null);
   const [name, setName] = useState(modulo.name ?? "");
   const [isLoading, setIsLoading] = useState(true);

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CCol, CContainer, CRow } from "@coreui/react";
+import QuestionsManager from "../../components/admin/Exam";
 import {
   Button,
   TextField,
@@ -14,10 +15,46 @@ import {
 } from "../../firebase/firestore";
 import { uploadFiles } from "../../firebase/storage";
 import Modulo from "../../components/admin/Module";
-import Examen from "../../components/admin/Exam";
+import DataTable from "../../components/admin/DataTable";
 import Notification from "../../components/shared/Notifications";
 import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../stripe/stripe";
+
+const columns = [
+  { field: "id", headerName: "ID", width: 100 },
+  {
+    field: "createdAt",
+    headerName: "Fecha de creacion",
+    width: 160,
+    valueGetter: (params) =>
+      `${
+        params.row.createdAt &&
+        params.row.createdAt.toDate().toLocaleDateString("es-MX")
+      }`,
+  },
+  { field: "name", headerName: "Nombre(s)", width: 130 },
+  { field: "lastname", headerName: "Apellidos", width: 130 },
+  {
+    field: "fullName",
+    headerName: "Nombre completo",
+    description: "This column has a value getter and is not sortable.",
+    sortable: false,
+    width: 160,
+    valueGetter: (params) =>
+      `${params.row.name || ""} ${params.row.lastname || ""}`,
+  },
+  {
+    field: "email",
+    headerName: "Correo electrónico",
+    width: 160,
+  },
+
+  {
+    field: "role",
+    headerName: "Rol",
+    width: 160,
+  },
+];
 
 const marks = [
   {
@@ -55,7 +92,6 @@ const SaveCourse = (props) => {
     target: "",
   };
   const [data, setData] = React.useState(courseParams ?? initialData);
-  const [lecciones, setLecciones] = useState([]);
   const agregarModulo = () => {
     setModulos([...modulos, { id: new Date().getTime() }]);
   };
@@ -76,8 +112,10 @@ const SaveCourse = (props) => {
 
   const handleSave = async () => {
     console.log("modulos", modulos);
-    await uploadFiles(file, "miniaturas").then(async (response) => {
-      const { title, summary, level, price, description, target } = data;
+
+    if (!isNew) {
+      const { title, summary, level, price, description, target, thumbnail } =
+        data;
       const course = {
         title,
         summary,
@@ -88,18 +126,52 @@ const SaveCourse = (props) => {
         status: "draft",
         createdAt: new Date(),
         reviews: [],
-        thumbnail: response.fullPath,
+        thumbnail,
       };
-      await createCourse("courses", course, modulos).then((response) => {
+      await updateDocument(
+        "courses",
+        courseId,
+        course,
+        modulos,
+        lecciones
+      ).then((response) => {
         console.log(response);
         setNotify({
           isOpen: true,
-          message: "Curso guardado con exito",
+          message: "Curso actualizado con exito",
           type: "success",
         });
         navigate("/admin/courses");
       });
-    });
+    }
+
+    if (!file) {
+    } else {
+      await uploadFiles(file, "miniaturas").then(async (response) => {
+        const { title, summary, level, price, description, target } = data;
+        const course = {
+          title,
+          summary,
+          level,
+          price,
+          description,
+          target,
+          status: "draft",
+          createdAt: new Date(),
+          reviews: [],
+          thumbnail: response.fullPath,
+        };
+        await createCourse("courses", course, modulos).then((response) => {
+          console.log(response);
+          setNotify({
+            isOpen: true,
+            message: "Curso guardado con exito",
+            type: "success",
+          });
+          navigate("/admin/courses");
+        });
+      });
+    }
   };
 
   const addImage = (e) => {
@@ -172,7 +244,7 @@ const SaveCourse = (props) => {
       };
     }
 
-    await updateDocument("courses", courseId, course, modulos, lecciones)
+    await updateDocument("courses", courseId, course, modulos)
       .then((response) => {
         console.log(response);
         setNotify({
@@ -205,6 +277,17 @@ const SaveCourse = (props) => {
               </Button>
             </div>
           </CCol>
+        </CRow>
+        <CRow>
+          {isNew ? null : (
+            <CCol className="flex pb-6">
+              <DataTable
+                columns={columns}
+                collection={"usersfilter"}
+                courseId={courseId}
+              />
+            </CCol>
+          )}
         </CRow>
         <CRow>
           <CCol className="flex gap-4 flex-col">
@@ -333,28 +416,18 @@ const SaveCourse = (props) => {
               modulos={modulos}
               setModulos={setModulos}
               courseId={courseId}
-              setLecciones={setLecciones}
-              lecciones={lecciones}
             />
           ))}
           <Button variant="contained" className="mt-4" onClick={agregarModulo}>
             Agregar Módulo
           </Button>
         </div>
-        {/* <Examen examen={examen} agregarPregunta={agregarPregunta} /> */}
-
-        <CRow className="py-10">
-          <CCol className="flex justify-end">
-            <div className="flex gap-4">
-              <Button variant="contained" onClick={handlePublish}>
-                {isNew ? "Crear nuevo curso" : "Editar curso"}
-              </Button>
-              <Button variant="contained" onClick={handleSave}>
-                Guardar curso
-              </Button>
-            </div>
-          </CCol>
-        </CRow>
+        {isNew ? null : (
+          <QuestionsManager
+            courseId={courseId}
+            isNew={isNew}
+          ></QuestionsManager>
+        )}
       </CContainer>
       <Notification notify={notify} setNotify={setNotify} position={"top"} />
     </>

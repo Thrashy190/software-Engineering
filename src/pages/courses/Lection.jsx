@@ -18,9 +18,6 @@ const Lection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(id);
-      console.log(moduleindex);
-      console.log(lessonindex);
       try {
         const course = await getSingleCourseWithSubcollections("courses", id);
         setLeccion(course.modules[moduleindex].lessons[lessonindex]);
@@ -46,36 +43,37 @@ const Lection = () => {
         </div>
       ) : (
         <CContainer className="pt-10">
+          {videoUrl && (
+            <CRow>
+              <CCol xs={9}>
+                {<video src={videoUrl} className="w-full" controls />}
+              </CCol>
+              <CCol xs={3}>
+                <ModuleProgressList modules={courseData.modules} id={id} />
+              </CCol>
+            </CRow>
+          )}
+
           <CRow>
             <CCol xs={9}>
-              <video src={videoUrl} className="w-full" controls />
-              <div className="flex justify-end gap-3 pt-2">
-                <div className="border-solid border-2 border-[#FAD264] rounded-lg">
-                  <FastRewindIcon color="primary" fontSize="large" />
+              <div className="flex flex-col gap-4 py-4">
+                <div className="text-white font-medium text-2xl">
+                  Leccion: {leccion.title}
                 </div>
-                <div className="border-solid border-2 border-[#FAD264] rounded-lg">
-                  <FastForwardIcon color="primary" fontSize="large" />
+                <div className="text-white font-medium text-2xl">
+                  Resumen de la Lección:
+                </div>
+                <div className="text-white font-medium text-xl">
+                  {leccion.summary}
                 </div>
               </div>
             </CCol>
-            <CCol xs={3}>
-              <ModuleProgressList modules={courseData.modules} id={id} />
-            </CCol>
+            {!videoUrl && (
+              <CCol xs={3}>
+                <ModuleProgressList modules={courseData.modules} id={id} />
+              </CCol>
+            )}
           </CRow>
-          <div className="flex flex-col gap-4">
-            <div className="text-white font-medium text-2xl">
-              Leccion: {leccion.title}
-            </div>
-            <div className="text-white font-medium text-2xl">
-              Resumen de la Lección:
-            </div>
-            <div className="text-white font-medium text-xl">
-              {leccion.summary}
-            </div>
-            <div className="text-white font-medium text-2xl">
-              Archivos adjuntos
-            </div>
-          </div>
         </CContainer>
       )}
     </>

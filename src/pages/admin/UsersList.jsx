@@ -30,11 +30,7 @@ const UsersList = () => {
       headerName: "Correo electrónico",
       width: 160,
     },
-    {
-      field: "phone",
-      headerName: "Teléfono",
-      width: 160,
-    },
+
     {
       field: "role",
       headerName: "Rol",

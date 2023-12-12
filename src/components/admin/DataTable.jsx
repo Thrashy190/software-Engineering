@@ -1,9 +1,17 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { LinearProgress } from "@mui/material";
-import { getCollection } from "../../firebase/firestore";
+import {
+  getCollection,
+  getCollectionWithQuery,
+} from "../../firebase/firestore";
 
-export default function DataTable({ columns, collection, onRowDoubleClick }) {
+export default function DataTable({
+  columns,
+  collection,
+  onRowDoubleClick,
+  courseId,
+}) {
   const [rows, setRows] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -17,8 +25,21 @@ export default function DataTable({ columns, collection, onRowDoubleClick }) {
         console.error("Error al traer la info", error);
       }
     };
+    const fetchDataQuery = async () => {
+      try {
+        const data = await getCollectionWithQuery("users", courseId);
+        setRows(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error al traer la info", error);
+      }
+    };
 
-    fetchData();
+    if (collection === "usersfilter") {
+      fetchDataQuery();
+    } else {
+      fetchData();
+    }
   }, []);
 
   return (
@@ -31,7 +52,7 @@ export default function DataTable({ columns, collection, onRowDoubleClick }) {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 10 },
             },
           }}
           pageSizeOptions={[5, 10]}

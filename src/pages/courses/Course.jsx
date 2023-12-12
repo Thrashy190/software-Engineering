@@ -6,6 +6,7 @@ import Instructor from "../../components/shared/Instructor";
 import { downloadImage } from "../../firebase/storage";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import Rating from "@mui/material/Rating";
 import DifficultyIcon from "../../components/shared/DifficultyIcon";
 import { formatCurrencyToMXN } from "../../utils/formatter";
 import ModuleList from "../../components/course/ModuleList";
@@ -168,10 +169,71 @@ const Course = () => {
           </CRow>
           <CRow className="pb-6">
             <CCol className="flex justify-center">
-              <ModuleList modules={courseData.modules} id={id}></ModuleList>
+              {hasCourse ? (
+                <ModuleList modules={courseData.modules} id={id}></ModuleList>
+              ) : (
+                <div className="text-white text-2xl">
+                  Para ver el contenido del curso debes comprarlo
+                </div>
+              )}
+            </CCol>
+          </CRow>
+          <CRow className="pb-6">
+            <CCol className="flex justify-center">
+              <div className="text-[#FAD264] text-4xl font-bold">Examen</div>
+            </CCol>
+          </CRow>
+          <CRow className="pb-6">
+            <CCol className="flex justify-center">
+              <Button
+                size="large"
+                className="my-2"
+                variant="contained"
+                onClick={() => navigate(`/examen/${id}`)}
+              >
+                Tomar examen
+              </Button>
             </CCol>
           </CRow>
           <Instructor />
+          <CRow className="py-6">
+            <CCol className="flex justify-center">
+              <div className="text-[#FAD264] text-4xl font-bold">Reseñas</div>
+            </CCol>
+          </CRow>
+          <CRow className="pt-4">
+            <CCol className="flex justify-center">
+              <div>
+                {courseData.reviews &&
+                  courseData.reviews.map((review) => {
+                    return (
+                      <div className="flex flex-col gap-3 py-4">
+                        <div className="text-[#FAD264] text-3xl">
+                          {review.userName}
+                        </div>
+                        <div className="text-white text-2xl">
+                          <Rating
+                            sx={{
+                              "& .css-dqr9h-MuiRating-label": {
+                                color: (theme) => theme.palette.primary.main,
+                              },
+                              ".MuiRating-iconEmpty": {
+                                color: (theme) => theme.palette.primary.main,
+                              },
+                            }}
+                            value={review.rate}
+                            readOnly
+                          />
+                        </div>
+                        <div className="text-white text-2xl">
+                          {review.comment}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </CCol>
+          </CRow>
         </CContainer>
       ) : (
         <div className="flex justify-center items-center">

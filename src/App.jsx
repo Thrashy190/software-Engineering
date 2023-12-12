@@ -13,6 +13,7 @@ import ProfileUser from "./pages/users/Profile";
 import ProfileAdmin from "./pages/admin/Profile";
 import RecoverPassword from "./pages/auth/RecoverPassword";
 import Lection from "./pages/courses/Lection";
+import Exam from "./pages/courses/Exam.jsx";
 
 import AdminLayout from "./layout/AdminLayout";
 import UserLayout from "./layout/UserLayout";
@@ -42,6 +43,7 @@ function App() {
               path="lection/:id/:moduleindex/:lessonindex"
               element={<Lection />}
             />
+            <Route path="examen/:id" element={<Exam />} />
             <Route path="mycourses" element={<MyCourses />} />
             <Route path="profile" element={<ProfileUser />} />
           </Route>

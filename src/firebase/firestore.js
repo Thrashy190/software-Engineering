@@ -25,6 +25,19 @@ export const getCollection = async (collectionName) => {
     return collectionData;
 };
 
+export const getCollectionWithQuery = async (collectionName, courseId) => {
+    const collectionData = [];
+    const collectionRef = collection(db, collectionName);
+    const collectionSnapshot = await getDocs(collectionRef);
+    collectionSnapshot.forEach((doc) => {
+        console.log(doc.data().coursesBought)
+        if (doc.data().coursesBought && doc.data().coursesBought.includes(courseId)) {
+            collectionData.push({ ...doc.data(), id: doc.id });
+        }
+    });
+    return collectionData;
+};
+
 export const getDocument = async (collectionName, documentId) => {
     const documentRef = doc(db, collectionName, documentId);
     const documentSnapshot = await getDoc(documentRef);
@@ -63,11 +76,12 @@ export const addDocument = async (collectionName, document) => {
     return documentRef;
 };
 
-export const updateDocument = async (collectionName, documentId, document, modules,lecciones) => {
+export const updateDocument = async (collectionName, documentId, document, modules) => {
     console.log(document)
     const documentRef = doc(db, collectionName, documentId);
     const documentUpdated = await updateDoc(documentRef, document);
     //Update subcollections (modules and lessons)
+    console.log(modules)
     if (modules) {
         for (const modulo of modules) {
 
@@ -77,20 +91,19 @@ export const updateDocument = async (collectionName, documentId, document, modul
             if (moduloSnapshot.exists()) {
                 // Modulo exists, update it
                 await updateDoc(moduloRef, modulo);
-
-                if (lecciones) {
-                    for (const leccion of lecciones) {
-                        const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
-                        const leccionSnapshot = await getDoc(leccionRef);
-                        if (leccionSnapshot.exists()) {
-                            // Lesson exists, update it
-                            await updateDoc(leccionRef, leccion);
-                        } else {
-                            // Lesson does not exist, create it
-                            await addDoc(collection(leccionRef.parent), leccion);
-                        }
-                    }
-                }
+                // if (modulo.lecciones) {
+                //     for (const leccion of lecciones) {
+                //         const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
+                //         const leccionSnapshot = await getDoc(leccionRef);
+                //         if (leccionSnapshot.exists()) {
+                //             // Lesson exists, update it
+                //             await updateDoc(leccionRef, leccion);
+                //         } else {
+                //             // Lesson does not exist, create it
+                //             await addDoc(collection(leccionRef.parent), leccion);
+                //         }
+                //     }
+                // }
 
             } else {
                 // Modulo does not exist, create it
@@ -127,7 +140,8 @@ export const deleteDocument = async (collectionName, documentId) => {
 export const getCollectionWithSubcollections = async (collectionName) => {
     const collectionData = [];
     const collectionRef = collection(db, collectionName);
-    const collectionSnapshot = await getDocs(collectionRef);
+    const q = query(collectionRef, where("status","==","published"));
+    const collectionSnapshot = await getDocs(q);
 
     for (const doc of collectionSnapshot.docs) {
         const docData = doc.data();
@@ -242,3 +256,5 @@ export const getDocumentsByUids = async (collectionName, uids) => {
 
     return documentsData;
 };
+
+

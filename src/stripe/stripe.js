@@ -44,10 +44,12 @@ export const createProduct = async (courseName, desc, p) => {
         description: desc,
         price: p
     }
+    const backendPort = 3001
+    const backendUrlBase = `http://localhost:${backendPort}`
 
     const dataJson = JSON.stringify(data)
 
-    const response = await fetch(`${baseUrl}/create-product`, {
+    const response = await fetch(`${backendUrlBase}/create-product`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

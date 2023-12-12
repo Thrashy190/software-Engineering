@@ -47,7 +47,7 @@ const AuthProvider = ({ children }) => {
             if (doc.data().role === "admin") {
               navigate("/admin/home");
             } else {
-              navigate("/mycourses");
+              navigate("/courses");
             }
           }
         });
