@@ -30,7 +30,6 @@ export const getCollectionWithQuery = async (collectionName, courseId) => {
     const collectionRef = collection(db, collectionName);
     const collectionSnapshot = await getDocs(collectionRef);
     collectionSnapshot.forEach((doc) => {
-        console.log(doc.data().coursesBought)
         if (doc.data().coursesBought && doc.data().coursesBought.includes(courseId)) {
             collectionData.push({ ...doc.data(), id: doc.id });
         }
@@ -77,7 +76,7 @@ export const addDocument = async (collectionName, document) => {
 };
 
 export const updateDocument = async (collectionName, documentId, document, modules) => {
-    console.log(document)
+
     const documentRef = doc(db, collectionName, documentId);
     const documentUpdated = await updateDoc(documentRef, document);
     //Update subcollections (modules and lessons)
@@ -91,26 +90,26 @@ export const updateDocument = async (collectionName, documentId, document, modul
             if (moduloSnapshot.exists()) {
                 // Modulo exists, update it
                 await updateDoc(moduloRef, modulo);
-                // if (modulo.lecciones) {
-                //     for (const leccion of lecciones) {
-                //         const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
-                //         const leccionSnapshot = await getDoc(leccionRef);
-                //         if (leccionSnapshot.exists()) {
-                //             // Lesson exists, update it
-                //             await updateDoc(leccionRef, leccion);
-                //         } else {
-                //             // Lesson does not exist, create it
-                //             await addDoc(collection(leccionRef.parent), leccion);
-                //         }
-                //     }
-                // }
+                if (modulo.lessons) {
+                    for (const leccion of modulo.lessons) {
+                        const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
+                        const leccionSnapshot = await getDoc(leccionRef);
+                        if (leccionSnapshot.exists()) {
+                            // Lesson exists, update it
+                            await updateDoc(leccionRef, leccion);
+                        } else {
+                            // Lesson does not exist, create it
+                            await addDoc(collection(leccionRef.parent), leccion);
+                        }
+                    }
+                }
 
             } else {
                 // Modulo does not exist, create it
                 await addDoc(collection(moduloRef.parent), modulo);
 
-                if (modulo.lecciones) {
-                    for (const leccion of modulo.lecciones) {
+                if (modulo.lessons) {
+                    for (const leccion of modulo.lessons) {
                         const leccionRef = doc(db, `${collectionName}/${documentId}/modules/${modulo.id}/lessons`, leccion.id);
                         const leccionSnapshot = await getDoc(leccionRef);
                         if (leccionSnapshot.exists()) {

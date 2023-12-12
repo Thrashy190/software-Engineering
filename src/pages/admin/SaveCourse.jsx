@@ -111,8 +111,6 @@ const SaveCourse = (props) => {
   // };
 
   const handleSave = async () => {
-    console.log("modulos", modulos);
-
     if (!isNew) {
       const { title, summary, level, price, description, target, thumbnail } =
         data;
@@ -216,6 +214,8 @@ const SaveCourse = (props) => {
   };
 
   const updateAndPublish = async () => {
+    console.log("modulos", modulos);
+
     const { title, summary, level, price, description, target, priceId } = data;
 
     let course = {

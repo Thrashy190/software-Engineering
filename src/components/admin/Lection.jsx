@@ -4,7 +4,6 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { CContainer, CRow, CCol } from "@coreui/react";
 import { TextField, Button } from "@mui/material";
 import { uploadFiles } from "../../firebase/storage";
-import { async } from "@firebase/util";
 
 const Leccion = ({
   leccion,
@@ -58,7 +57,7 @@ const Leccion = ({
 
   const updateModuleLeccion = () => {
     const newModules = [...modulos];
-    newModules[indexModule].leccion = lecciones;
+    newModules[indexModule].lessons = lecciones;
     setModulos(newModules);
   };
 
