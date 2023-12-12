@@ -60,7 +60,7 @@ export const createCourse = async (collectionName, document, modules) => {
     for (const module of modules) {
         const moduleRef = collection(db, `${collectionName}/${documentCourseRef.id}/modules`);
         const documentmoduleRef = await addDoc(moduleRef, { name: module.name });
-        for (const lesson of module.leccion) {
+        for (const lesson of module.lessons) {
             const lessonRef = collection(db, `${collectionName}/${documentCourseRef.id}/modules/${documentmoduleRef.id}/lessons`);
             const documentlessonRef = await addDoc(lessonRef, lesson);
             console.log(documentlessonRef)

@@ -126,21 +126,17 @@ const SaveCourse = (props) => {
         reviews: [],
         thumbnail,
       };
-      await updateDocument(
-        "courses",
-        courseId,
-        course,
-        modulos,
-        lecciones
-      ).then((response) => {
-        console.log(response);
-        setNotify({
-          isOpen: true,
-          message: "Curso actualizado con exito",
-          type: "success",
-        });
-        navigate("/admin/courses");
-      });
+      await updateDocument("courses", courseId, course, modulos).then(
+        (response) => {
+          console.log(response);
+          setNotify({
+            isOpen: true,
+            message: "Curso actualizado con exito",
+            type: "success",
+          });
+          navigate("/admin/courses");
+        }
+      );
     }
 
     if (!file) {
